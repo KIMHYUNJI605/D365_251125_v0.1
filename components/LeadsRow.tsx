@@ -48,7 +48,7 @@ const LeadRowItem: React.FC<{ lead: Lead }> = ({ lead }) => {
                 </div>
             </div>
             <div className="ml-4 hidden sm:block">
-                 <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-600" />
+                 <ChevronRight size={16} className="text-slate-500 group-hover:text-slate-600" />
             </div>
         </div>
     );
@@ -80,13 +80,13 @@ export const RowThree: React.FC = () => {
     const yesterdayEvents = TIMELINE.filter(e => !e.isToday);
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-6 h-full min-h-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-4 h-full min-h-0">
             {/* LEFT: New Leads */}
             <div className="md:col-span-1 lg:col-span-6 h-auto lg:h-full min-h-0">
                 <Card title="New Leads" className="bg-white" fullHeight>
                     <div className="flex flex-col">
                         {/* Header only visible on Tablet/Desktop */}
-                        <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider bg-slate-50 -mx-6 border-b border-slate-100 mb-1">
+                        <div className="hidden sm:grid grid-cols-12 gap-4 px-6 py-2 text-xs font-bold text-slate-500 uppercase tracking-wider bg-slate-50 -mx-6 border-b border-slate-100 mb-1">
                             <div className="col-span-4">Name</div>
                             <div className="col-span-5">Interest</div>
                             <div className="col-span-3 text-right">Status</div>

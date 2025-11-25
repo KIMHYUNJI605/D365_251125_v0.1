@@ -48,7 +48,7 @@ const ActivityItem: React.FC<{ item: Activity }> = ({ item }) => {
 
 const ActionItemRow: React.FC<{ item: ActionItem }> = ({ item }) => (
     <div className="flex items-start py-3 border-b border-slate-100/80 last:border-0 hover:bg-white/50 -mx-4 md:-mx-6 px-4 md:px-6 transition-colors group cursor-pointer">
-        <div className="mt-1 mr-3 text-slate-400 group-hover:text-slate-600 shrink-0">
+        <div className="mt-1 mr-3 text-slate-600 group-hover:text-slate-500 shrink-0">
              {item.priority === 'High' ? <AlertCircle size={18} className="text-inventis-red" /> : <CheckCircle2 size={18} />}
         </div>
         <div className="flex-1 min-w-0">
@@ -62,7 +62,7 @@ const ActionItemRow: React.FC<{ item: ActionItem }> = ({ item }) => (
              <div className="hidden sm:block">
                 <Badge label={`Due: ${item.due}`} variant="light" color={item.priority === 'High' ? 'red' : 'slate'} />
              </div>
-             <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-600" />
+             <ChevronRight size={16} className="text-slate-500 group-hover:text-slate-600" />
         </div>
     </div>
 );
@@ -71,7 +71,7 @@ export const RowTwo: React.FC = () => {
     const [activeTab, setActiveTab] = useState<'Today' | 'Tomorrow'>('Today');
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-6 h-full min-h-0">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 md:gap-4 h-full min-h-0">
             {/* LEFT: Today's Activities */}
             <div className="md:col-span-1 lg:col-span-6 h-auto lg:h-full min-h-0">
                 <Card 

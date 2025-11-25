@@ -67,20 +67,6 @@ export default function App() {
         
         {/* ROW 1: KPIs */}
         <div className="shrink-0 flex flex-col gap-3">
-           
-           {/* Section Header with Refresh Control */}
-           <div className="flex items-center justify-between px-1">
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Performance Overview</h2>
-              <button 
-                onClick={refreshData}
-                disabled={isRefreshing}
-                className="flex items-center gap-2 text-[10px] font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                 <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} />
-                 {isRefreshing ? 'Updating...' : 'Refresh Data'}
-              </button>
-           </div>
-
            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {kpis.map((kpi) => (
                 <div key={kpi.id} className="col-span-1">

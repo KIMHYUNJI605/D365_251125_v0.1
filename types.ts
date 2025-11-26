@@ -1,3 +1,4 @@
+
 export interface KPI {
   id: string;
   label: string;
@@ -46,4 +47,33 @@ export interface TimelineEvent {
   type: ActivityType;
   description: string;
   isToday: boolean;
+}
+
+export type DealStage = 
+  | 'Lead Contacted' 
+  | 'Appointment Set' 
+  | 'Visit / Test Drive' 
+  | 'Worksheet / Desking' 
+  | 'Credit & Docs' 
+  | 'F&I' 
+  | 'Contract Signing' 
+  | 'Delivery'
+  | 'Post Follow-up';
+
+export interface Deal {
+  id: string;
+  customerName: string;
+  leadSource: 'Web' | 'Phone' | 'Walk-in' | 'Referral' | 'Campaign';
+  year: string;
+  vehicle: string;
+  trim: string;
+  dealAmount: string;
+  status: 'HOT' | 'WARM' | 'COLD';
+  stage: DealStage;
+  lastActivity: string;
+  lastActivityTime: string;
+  nextAction?: string;
+  agent?: string;
+  missingDocs?: boolean;
+  probability?: number;
 }

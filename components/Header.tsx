@@ -1,8 +1,20 @@
+
 import React, { useState } from 'react';
 import { User, Menu, X, Search, ChevronDown } from 'lucide-react';
 
-const NavItem: React.FC<{ label: string; active?: boolean; mobile?: boolean }> = ({ label, active, mobile }) => (
+interface HeaderProps {
+  currentView?: 'dashboard' | 'deals';
+  onNavigate?: (view: 'dashboard' | 'deals') => void;
+}
+
+const NavItem: React.FC<{ 
+  label: string; 
+  active?: boolean; 
+  mobile?: boolean;
+  onClick?: () => void; 
+}> = ({ label, active, mobile, onClick }) => (
   <button
+    onClick={onClick}
     className={`relative px-3 py-1.5 text-sm font-medium transition-colors duration-200 group ${
       mobile ? 'w-full text-left border-l-4 py-3 px-4' : ''
     } ${
@@ -22,16 +34,21 @@ const NavItem: React.FC<{ label: string; active?: boolean; mobile?: boolean }> =
   </button>
 );
 
-export const Header: React.FC = () => {
+export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNavigate }) => {
   const [mode, setMode] = useState<'CRM' | 'Config'>('CRM');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const handleNav = (view: 'dashboard' | 'deals') => {
+    if (onNavigate) onNavigate(view);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
-      <header className="h-[56px] bg-white border-b border-inventis-border flex items-center justify-between shrink-0 relative z-40 shadow-sm">
+      <header className="h-[56px] bg-white border-b border-slate-200 flex items-center justify-between shrink-0 relative z-40 shadow-sm">
         
         {/* LEFT: Logo (Columns 1-3) */}
-        <div className="flex items-center h-full pl-8 shrink-0 w-auto">
+        <div className="flex items-center h-full pl-8 shrink-0 w-auto cursor-pointer" onClick={() => handleNav('dashboard')}>
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 bg-slate-900 rounded-md flex items-center justify-center text-white font-bold text-sm shadow-sm">D</div>
             <span className="text-lg font-bold tracking-tight text-slate-900 leading-none">Dealer365</span>
@@ -41,8 +58,8 @@ export const Header: React.FC = () => {
         {/* CENTER: Navigation (Columns 4-9) */}
         <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 flex-1 h-full px-4 overflow-hidden">
           <div className="flex items-center gap-1">
-            <NavItem label="Dashboard" active />
-            <NavItem label="Deals" />
+            <NavItem label="Dashboard" active={currentView === 'dashboard'} onClick={() => handleNav('dashboard')} />
+            <NavItem label="Deals" active={currentView === 'deals'} onClick={() => handleNav('deals')} />
             <NavItem label="Inventory" />
             <NavItem label="Test Drives" />
             <div className="hidden lg:block">
@@ -116,7 +133,7 @@ export const Header: React.FC = () => {
       {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 top-[56px] z-30 bg-slate-900/50 backdrop-blur-sm md:hidden">
-          <div className="bg-white w-full shadow-xl border-b border-inventis-border animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-56px)] overflow-auto">
+          <div className="bg-white w-full shadow-xl border-b border-slate-200 animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-56px)] overflow-auto">
             <div className="p-4 flex flex-col gap-2">
               {/* Mobile User Header */}
               <div className="flex items-center gap-3 px-4 py-3 mb-2 bg-slate-50 rounded-lg border border-slate-100">
@@ -131,8 +148,8 @@ export const Header: React.FC = () => {
               
               <div className="h-px bg-slate-100 my-1" />
 
-              <NavItem label="Dashboard" active mobile />
-              <NavItem label="Deals" mobile />
+              <NavItem label="Dashboard" active={currentView === 'dashboard'} mobile onClick={() => handleNav('dashboard')} />
+              <NavItem label="Deals" active={currentView === 'deals'} mobile onClick={() => handleNav('deals')} />
               <NavItem label="Inventory" mobile />
               <NavItem label="Test Drives" mobile />
               <NavItem label="More" mobile />

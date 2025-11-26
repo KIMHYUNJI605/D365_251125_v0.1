@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { KPICard } from './components/KPICard';
@@ -5,6 +6,7 @@ import { RowTwo } from './components/ActivityRow';
 import { RowThree } from './components/LeadsRow';
 import { FloatingActions } from './components/FloatingActions';
 import { KPIDetailModal } from './components/KPIDetailModal';
+import { DealsScreen } from './components/DealsScreen';
 import { KPI } from './types';
 import { RefreshCw } from 'lucide-react';
 
@@ -16,30 +18,23 @@ const INITIAL_KPIS: KPI[] = [
   { id: '4', label: 'Deliveries', value: '3', trend: 0, data: [1, 2, 1, 3, 2, 3, 3] },
 ];
 
+type ViewState = 'dashboard' | 'deals';
+
 export default function App() {
+  const [currentView, setCurrentView] = useState<ViewState>('deals'); // Defaulting to Deals as per prompt instruction implicitly
   const [selectedKPI, setSelectedKPI] = useState<KPI | null>(null);
   const [kpis, setKpis] = useState<KPI[]>(INITIAL_KPIS);
-  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const refreshData = useCallback(() => {
-    setIsRefreshing(true);
-    
     // Simulate network request delay for realism
     setTimeout(() => {
       setKpis(prev => prev.map(kpi => {
-        // Parse current value
         const currentVal = parseInt(kpi.value);
-        
-        // Random fluctuation between -1 and 2
         const change = Math.floor(Math.random() * 4) - 1; 
         const newVal = Math.max(0, currentVal + change);
-        
-        // Update trend slightly based on value change direction
         let newTrend = kpi.trend;
         if (newVal > currentVal) newTrend += 1;
         if (newVal < currentVal) newTrend -= 1;
-        
-        // Update history data (shift left)
         const newData = [...kpi.data.slice(1), newVal];
 
         return {
@@ -49,60 +44,58 @@ export default function App() {
           data: newData
         };
       }));
-      setIsRefreshing(false);
     }, 800);
   }, []);
 
-  // Set up periodic refresh (every 30 seconds)
   useEffect(() => {
     const intervalId = setInterval(refreshData, 30000);
     return () => clearInterval(intervalId);
   }, [refreshData]);
 
   return (
-    <div className="flex flex-col h-screen w-screen bg-inventis-bg font-sans overflow-y-auto lg:overflow-hidden">
-      <Header />
+    <div className="flex flex-col h-screen w-screen bg-[#FFFFFF] font-sans overflow-hidden">
       
-      <main className="flex-1 p-4 md:p-6 lg:p-8 lg:overflow-hidden flex flex-col gap-4 md:gap-4 pb-32 md:pb-6">
+      <Header currentView={currentView} onNavigate={setCurrentView} />
+      
+      <main className="flex-1 h-full overflow-hidden relative">
         
-        {/* ROW 1: KPIs */}
-        <div className="shrink-0 flex flex-col gap-3">
-           <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {kpis.map((kpi) => (
-                <div key={kpi.id} className="col-span-1">
-                  <KPICard 
-                    kpi={kpi} 
-                    onClick={(k) => setSelectedKPI(k)}
-                  />
-                </div>
-              ))}
+        {/* DASHBOARD VIEW */}
+        <div className={`absolute inset-0 flex flex-col gap-4 p-4 md:p-6 lg:p-8 overflow-y-auto lg:overflow-hidden transition-opacity duration-300 ${currentView === 'dashboard' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+           {/* KPI Row */}
+           <div className="shrink-0 flex flex-col gap-3">
+             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {kpis.map((kpi) => (
+                  <div key={kpi.id} className="col-span-1">
+                    <KPICard kpi={kpi} onClick={(k) => setSelectedKPI(k)} />
+                  </div>
+                ))}
+             </div>
+           </div>
+
+           {/* Dashboard Grid */}
+           <div className="flex-1 flex flex-col gap-4 min-h-0">
+              <div className="lg:flex-1 lg:min-h-0 h-auto shrink-0">
+                  <RowTwo />
+              </div>
+              <div className="lg:flex-1 lg:min-h-0 h-auto shrink-0">
+                  <RowThree />
+              </div>
            </div>
         </div>
 
-        {/* REMAINING SPACE */}
-        <div className="flex-1 flex flex-col gap-4 md:gap-4 min-h-0 lg:overflow-hidden">
-            
-            {/* ROW 2: Activities & Actions */}
-            <div className="lg:flex-1 lg:min-h-0 h-auto shrink-0">
-                <RowTwo />
-            </div>
-
-            {/* ROW 3: Leads & Timeline */}
-            <div className="lg:flex-1 lg:min-h-0 h-auto shrink-0">
-                <RowThree />
-            </div>
-            
+        {/* DEALS VIEW */}
+        <div className={`absolute inset-0 flex flex-col transition-opacity duration-300 ${currentView === 'deals' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+            <DealsScreen />
         </div>
+
       </main>
 
+      {/* Global Floating Actions */}
       <FloatingActions />
       
-      {/* KPI Detail Modal */}
+      {/* KPI Modal (Dashboard only) */}
       {selectedKPI && (
-        <KPIDetailModal 
-          kpi={selectedKPI} 
-          onClose={() => setSelectedKPI(null)} 
-        />
+        <KPIDetailModal kpi={selectedKPI} onClose={() => setSelectedKPI(null)} />
       )}
     </div>
   );

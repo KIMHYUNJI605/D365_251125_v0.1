@@ -1,27 +1,50 @@
+/**
+ * Deals Screen Component for Dealer365 TOBE
+ *
+ * Purpose: Kanban-style deal management interface with AI-powered insights
+ * Features:
+ * - 9-stage deal pipeline visualization
+ * - KPI dashboard with real-time metrics
+ * - Drag-and-drop deal cards (ready for implementation)
+ * - Detail panel with AI recommendations
+ * - Deal probability tracking
+ * - Activity timeline and quick actions
+ *
+ * Z-Index Hierarchy:
+ * - Main content: z-0 (base)
+ * - Detail panel overlay: z-[9998] (above all content)
+ * - Detail panel: z-[9999] (topmost layer, above header)
+ */
 
 import React, { useState } from 'react';
 import { Deal, DealStage } from '../types';
-import { 
-  Search, Filter, Plus, MoreHorizontal, AlertCircle, Calendar, 
-  FileText, Phone, Mail, X, Sparkles, ArrowRight, ChevronRight, 
+import {
+  Search, Filter, Plus, MoreHorizontal, AlertCircle, Calendar,
+  FileText, Phone, Mail, X, Sparkles, ArrowRight, ChevronRight,
   CheckSquare, Clock, ShieldCheck, DollarSign
 } from 'lucide-react';
 import { Badge } from './ui/Badge';
 
-// --- STAGE DEFINITIONS (9 Columns) ---
+/**
+ * Deal Pipeline Stages (9-column Kanban board)
+ * Represents the complete sales funnel from initial contact to post-delivery
+ */
 const STAGES: DealStage[] = [
-  'Lead Contacted', 
-  'Appointment Set', 
-  'Visit / Test Drive', 
-  'Worksheet / Desking', 
-  'Credit & Docs', 
-  'F&I', 
-  'Contract Signing', 
-  'Delivery', 
+  'Lead Contacted',
+  'Appointment Set',
+  'Visit / Test Drive',
+  'Worksheet / Desking',
+  'Credit & Docs',
+  'F&I',
+  'Contract Signing',
+  'Delivery',
   'Post Follow-up'
 ];
 
-// --- MOCK DATA GENERATION ---
+/**
+ * Mock Deal Data
+ * Sample deals distributed across all pipeline stages
+ */
 const DEALS: Deal[] = [
   // 1. Lead Contacted
   { id: '101', customerName: 'Michael Corleone', leadSource: 'Web', year: '2025', vehicle: 'Porsche Panamera', trim: 'Turbo S', dealAmount: '$185,000', status: 'HOT', stage: 'Lead Contacted', lastActivity: 'Email Opened', lastActivityTime: '10m ago', nextAction: 'Call to qualify', probability: 15 },
@@ -56,9 +79,18 @@ const DEALS: Deal[] = [
   { id: '901', customerName: 'Nick Fury', leadSource: 'Campaign', year: '2024', vehicle: 'Cadillac Escalade', trim: 'V-Series', dealAmount: '$152,000', status: 'WARM', stage: 'Post Follow-up', lastActivity: 'Survey Sent', lastActivityTime: '2d ago', nextAction: 'Service Intro', probability: 100 },
 ];
 
-// --- COMPONENTS ---
+// ========================================
+// SUB-COMPONENTS
+// ========================================
 
-// 1. KPI CARD (Micro version)
+/**
+ * KPI Item Component
+ * Displays a single key performance indicator with trend
+ * @param label - KPI label (e.g., "Deals Today")
+ * @param value - Current value
+ * @param trend - Trend indicator (e.g., "+3", "-1")
+ * @param up - Trend direction (true = up/positive, false = down/negative)
+ */
 const KPIItem: React.FC<{ label: string; value: string; trend: string; up: boolean }> = ({ label, value, trend, up }) => (
   <div className="bg-white rounded-[6px] shadow-sm border border-slate-200 px-4 py-3 flex flex-col justify-between h-[88px] min-w-[180px]">
     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
@@ -72,24 +104,32 @@ const KPIItem: React.FC<{ label: string; value: string; trend: string; up: boole
   </div>
 );
 
-// 2. DEAL CARD
+/**
+ * Deal Card Component
+ * Individual deal card displayed in Kanban columns
+ * Shows customer info, vehicle details, status, and next actions
+ * @param deal - Deal object with all details
+ * @param onClick - Handler when card is clicked
+ * @param isSelected - Whether this card is currently selected
+ */
 const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: boolean }> = ({ deal, onClick, isSelected }) => {
-  const statusColor = 
-    deal.status === 'HOT' ? 'bg-[#E75A5A]' : 
+  // Determine status badge color based on deal temperature
+  const statusColor =
+    deal.status === 'HOT' ? 'bg-[#E75A5A]' :
     deal.status === 'WARM' ? 'bg-[#F2A444]' : 'bg-[#8AA4FF]';
 
   return (
-    <div 
+    <div
       onClick={() => onClick(deal)}
       className={`
         w-full bg-white rounded-[6px] p-4 cursor-pointer transition-all duration-200 border relative group
-        ${isSelected 
-          ? 'ring-2 ring-[#B4E975] shadow-md border-transparent z-10' 
+        ${isSelected
+          ? 'ring-2 ring-[#B4E975] shadow-md border-transparent z-10'
           : 'border-slate-200 hover:border-slate-300 hover:shadow-card'
         }
       `}
     >
-      {/* [1] Header: Name + Status */}
+      {/* Header: Customer Name + Deal Status Badge */}
       <div className="flex justify-between items-start mb-1">
         <h3 className="text-[16px] font-bold text-[#424651] leading-tight group-hover:text-black transition-colors">
           {deal.customerName}
@@ -99,12 +139,12 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         </span>
       </div>
 
-      {/* [2] Lead Source */}
+      {/* Lead Source Label */}
       <div className="mb-2">
          <span className="text-[11px] font-medium text-slate-500">{deal.leadSource} Lead</span>
       </div>
 
-      {/* [3] Vehicle Info */}
+      {/* Vehicle Information */}
       <div className="mb-1">
         <p className="text-[14px] font-medium text-[#424651]">
           {deal.year} {deal.vehicle}
@@ -112,21 +152,25 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         <p className="text-[12px] text-slate-500">{deal.trim}</p>
       </div>
 
-      {/* [4] Amount */}
+      {/* Deal Amount */}
       <div className="flex justify-end mb-3">
         <span className="text-[14px] font-bold text-[#424651]">{deal.dealAmount}</span>
       </div>
 
+      {/* Divider */}
       <div className="h-px bg-slate-100 w-full mb-3"></div>
 
-      {/* [5] & [6] Activity & Next Action */}
+      {/* Activity Timeline & Next Action */}
       <div className="space-y-1.5">
+        {/* Last Activity */}
         <div className="flex items-center gap-1.5">
            <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
            <p className="text-[11px] text-slate-500 truncate">
              {deal.lastActivity} · {deal.lastActivityTime}
            </p>
         </div>
+
+        {/* Next Action Badge */}
         {deal.nextAction && (
           <div className="flex items-center gap-1.5 text-indigo-600 bg-indigo-50 px-2 py-1 rounded-[4px] w-fit max-w-full">
              <ArrowRight size={10} />
@@ -135,7 +179,7 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         )}
       </div>
 
-      {/* Missing Docs Indicator */}
+      {/* Missing Documents Alert Indicator */}
       {deal.missingDocs && (
         <div className="absolute top-[-4px] right-[-4px]">
            <span className="flex h-3 w-3 relative">
@@ -148,13 +192,19 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
   );
 };
 
+/**
+ * Main Deals Screen Component
+ * Full-page view of the deal management interface
+ */
 export const DealsScreen: React.FC = () => {
+  // Selected deal state for detail panel
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
 
   return (
     <div className="flex flex-col h-full bg-[#F7F7F7] overflow-hidden">
-      
-      {/* --- TOP KPI BAR --- */}
+
+      {/* ========== TOP KPI DASHBOARD ========== */}
+      {/* 4-column grid showing key metrics */}
       <div className="shrink-0 bg-[#F7F7F7] px-6 py-4 grid grid-cols-4 gap-4 border-b border-slate-200/50">
         <KPIItem label="Deals Today" value="12" trend="3" up={true} />
         <KPIItem label="Hot Deals" value="8" trend="2" up={true} />
@@ -162,38 +212,46 @@ export const DealsScreen: React.FC = () => {
         <KPIItem label="Appts Today" value="7" trend="0" up={true} />
       </div>
 
-      {/* --- MAIN CONTENT AREA --- */}
+      {/* ========== MAIN CONTENT AREA ========== */}
       <div className="flex-1 flex overflow-hidden relative">
-        
-        {/* KANBAN BOARD */}
+
+        {/* ===== KANBAN BOARD: 9-Column Deal Pipeline ===== */}
+        {/* Horizontal scrollable container for all pipeline stages */}
         <div className="flex-1 overflow-x-auto overflow-y-hidden">
            <div className="h-full px-6 py-4 flex gap-4 min-w-max pb-8">
+              {/* Iterate through all pipeline stages */}
               {STAGES.map((stage) => {
+                 // Filter deals for current stage
                  const stageDeals = DEALS.filter(d => d.stage === stage);
                  return (
                    <div key={stage} className="flex flex-col h-full w-[300px] shrink-0 align-top">
-                      {/* Column Header */}
+                      {/* Stage Column Header */}
                       <div className="flex items-center justify-between mb-4 pl-1 pr-2">
                          <div className="flex items-center gap-2">
                             <h4 className="text-[13px] font-bold text-[#424651] uppercase tracking-tight">{stage}</h4>
+                            {/* Deal count badge */}
                             <span className="bg-slate-200 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded-[4px]">
                                {stageDeals.length}
                             </span>
                          </div>
+                         {/* Column menu (future: stage actions) */}
                          <MoreHorizontal size={16} className="text-slate-400 cursor-pointer hover:text-slate-600" />
                       </div>
 
-                      {/* Drop Zone */}
+                      {/* Drop Zone: Scrollable deal cards container */}
+                      {/* Ready for drag-and-drop implementation */}
                       <div className="flex-1 flex flex-col gap-4 overflow-y-auto pb-20 pr-1 no-scrollbar">
+                         {/* Render all deals in this stage */}
                          {stageDeals.map(deal => (
-                           <DealCard 
-                              key={deal.id} 
-                              deal={deal} 
-                              onClick={setSelectedDeal} 
-                              isSelected={selectedDeal?.id === deal.id} 
+                           <DealCard
+                              key={deal.id}
+                              deal={deal}
+                              onClick={setSelectedDeal}
+                              isSelected={selectedDeal?.id === deal.id}
                            />
                          ))}
-                         {/* Empty State Stub */}
+
+                         {/* Empty State for columns with no deals */}
                          {stageDeals.length === 0 && (
                            <div className="h-24 border-2 border-dashed border-slate-200 rounded-[6px] flex items-center justify-center bg-slate-50/50">
                               <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">Empty</span>
@@ -206,19 +264,25 @@ export const DealsScreen: React.FC = () => {
            </div>
         </div>
 
-        {/* --- DETAIL PANEL (Overlay + Slide-in) --- */}
+        {/* ========== DETAIL PANEL (Modal Overlay) ========== */}
+        {/* Displays when a deal card is clicked */}
+        {/* IMPORTANT: Uses z-[9998] and z-[9999] to ensure it appears above header (z-40) */}
         {selectedDeal && (
           <>
-            {/* Dimmer Overlay - z-90 to be above FABs (z-50) */}
-            <div 
-              className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[90] transition-opacity duration-300"
+            {/* Background Overlay Dimmer */}
+            {/* z-[9998]: Above all content, below panel */}
+            {/* Clicking overlay closes the detail panel */}
+            <div
+              className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] transition-opacity duration-300"
               onClick={() => setSelectedDeal(null)}
             ></div>
 
-            {/* Panel Container - z-100 to be topmost */}
-            <div className="fixed top-0 right-0 w-[450px] md:w-[520px] h-screen bg-white z-[100] shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-300 ease-out">
-               
-               {/* Header */}
+            {/* Detail Panel Container */}
+            {/* z-[9999]: Topmost layer - above header (z-40), overlay (z-[9998]), and all other content */}
+            {/* Fixed positioning: top-0 ensures full-height modal from top of viewport */}
+            <div className="fixed top-0 right-0 w-[450px] md:w-[520px] h-screen bg-white z-[9999] shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-300 ease-out">
+
+               {/* ===== Panel Header ===== */}
                <div className="shrink-0 p-6 border-b border-slate-100 bg-white">
                   <div className="flex justify-between items-start mb-2">
                      <div>
@@ -239,10 +303,10 @@ export const DealsScreen: React.FC = () => {
                   </div>
                </div>
 
-               {/* Scrollable Body */}
+               {/* ===== Scrollable Body Content ===== */}
                <div className="flex-1 overflow-y-auto p-6 bg-white space-y-6">
-                  
-                  {/* 1. Vehicle Info Summary */}
+
+                  {/* Section 1: Vehicle Information Summary */}
                   <div className="flex items-start gap-4 p-4 bg-[#F7F7F7] rounded-[6px] border border-slate-100">
                       <div className="w-12 h-12 bg-white rounded-[6px] border border-slate-200 flex items-center justify-center shrink-0">
                          <CheckSquare size={20} className="text-slate-400" />
@@ -254,7 +318,8 @@ export const DealsScreen: React.FC = () => {
                       </div>
                   </div>
 
-                  {/* 2. AI Recommendation (Dark Mode) */}
+                  {/* Section 2: AI-Powered Recommendation */}
+                  {/* Dark-themed AI insight card with actionable suggestions */}
                   <div className="bg-[#424651] rounded-[6px] p-5 shadow-sm relative overflow-hidden group">
                      <div className="absolute top-[-10%] right-[-10%] opacity-10 rotate-12">
                         <Sparkles size={100} className="text-white" />
@@ -274,21 +339,24 @@ export const DealsScreen: React.FC = () => {
                      </button>
                   </div>
 
-                  {/* 3. Deal Probability */}
+                  {/* Section 3: Deal Closing Probability */}
+                  {/* Visual progress bar showing likelihood of deal closure */}
                   <div>
                      <div className="flex justify-between items-end mb-2">
                         <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Closing Probability</h4>
                         <span className="text-sm font-bold text-[#424651]">{selectedDeal.probability}%</span>
                      </div>
+                     {/* Progress bar - color changes based on probability */}
                      <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full rounded-full ${selectedDeal.probability && selectedDeal.probability > 50 ? 'bg-[#424651]' : 'bg-slate-400'}`} 
+                        <div
+                          className={`h-full rounded-full ${selectedDeal.probability && selectedDeal.probability > 50 ? 'bg-[#424651]' : 'bg-slate-400'}`}
                           style={{ width: `${selectedDeal.probability}%` }}
                         ></div>
                      </div>
                   </div>
 
-                  {/* 4. Quick Actions Grid */}
+                  {/* Section 4: Quick Actions Grid */}
+                  {/* 8-button grid for common deal operations */}
                   <div>
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-3">Quick Actions</h4>
                      <div className="grid grid-cols-4 gap-2">
@@ -310,10 +378,12 @@ export const DealsScreen: React.FC = () => {
                      </div>
                   </div>
 
-                  {/* 5. Required Tasks Checklist */}
+                  {/* Section 5: Required Tasks Checklist */}
+                  {/* Interactive checklist of tasks needed to progress the deal */}
                   <div>
                      <div className="flex items-center justify-between mb-3">
                         <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Required Tasks</h4>
+                        {/* Urgent task counter badge */}
                         <span className="text-[10px] font-bold text-orange-500 bg-orange-50 px-1.5 py-0.5 rounded-[4px]">2 Urgent</span>
                      </div>
                      <div className="space-y-2">
@@ -334,7 +404,8 @@ export const DealsScreen: React.FC = () => {
                      </div>
                   </div>
 
-                  {/* 6. Timeline */}
+                  {/* Section 6: Activity Timeline */}
+                  {/* Chronological history of all deal-related activities */}
                   <div>
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-4">Activity Timeline</h4>
                      <div className="pl-2 border-l-2 border-slate-100 space-y-6">
@@ -361,9 +432,11 @@ export const DealsScreen: React.FC = () => {
                      </button>
                   </div>
 
-                  {/* 7. Notes Stub */}
+                  {/* Section 7: Internal Notes */}
+                  {/* Sticky note style area for private deal notes */}
                   <div className="pb-10">
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-3">Internal Notes</h4>
+                     {/* Yellow sticky note design for visibility */}
                      <div className="bg-[#fff9c4] p-3 rounded-[6px] border border-yellow-200 shadow-sm">
                         <p className="text-xs text-yellow-900 leading-relaxed font-medium">
                            "Wife prefers the beige interior, but husband wants black. Need to find a compromise unit or check incoming inventory."
@@ -382,7 +455,14 @@ export const DealsScreen: React.FC = () => {
   );
 };
 
-// Helper for icon in mock data
+// ========================================
+// HELPER COMPONENTS & ICONS
+// ========================================
+
+/**
+ * UserPlus Icon Component
+ * Custom SVG icon for user addition in timeline
+ */
 function UserPlus(props: any) {
   return (
     <svg 

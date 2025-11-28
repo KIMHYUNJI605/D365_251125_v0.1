@@ -7,6 +7,7 @@ import { RowThree } from './components/LeadsRow';
 import { FloatingActions } from './components/FloatingActions';
 import { KPIDetailModal } from './components/KPIDetailModal';
 import { DealsScreen } from './components/DealsScreen';
+import { ConfigScreen } from './components/ConfigScreen';
 import { KPI } from './types';
 import { RefreshCw } from 'lucide-react';
 
@@ -18,7 +19,7 @@ const INITIAL_KPIS: KPI[] = [
   { id: '4', label: 'Deliveries', value: '3', trend: 0, data: [1, 2, 1, 3, 2, 3, 3] },
 ];
 
-type ViewState = 'dashboard' | 'deals';
+type ViewState = 'dashboard' | 'deals' | 'config';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<ViewState>('deals'); // Defaulting to Deals as per prompt instruction implicitly
@@ -88,10 +89,15 @@ export default function App() {
             <DealsScreen />
         </div>
 
+        {/* CONFIG VIEW */}
+        <div className={`absolute inset-0 flex flex-col transition-opacity duration-300 ${currentView === 'config' ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'}`}>
+            <ConfigScreen />
+        </div>
+
       </main>
 
-      {/* Global Floating Actions */}
-      <FloatingActions />
+      {/* Global Floating Actions - Show on Dashboard/Deals only */}
+      {currentView !== 'config' && <FloatingActions />}
       
       {/* KPI Modal (Dashboard only) */}
       {selectedKPI && (

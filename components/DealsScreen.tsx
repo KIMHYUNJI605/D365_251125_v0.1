@@ -1,50 +1,28 @@
-/**
- * Deals Screen Component for Dealer365 TOBE
- *
- * Purpose: Kanban-style deal management interface with AI-powered insights
- * Features:
- * - 9-stage deal pipeline visualization
- * - KPI dashboard with real-time metrics
- * - Drag-and-drop deal cards (ready for implementation)
- * - Detail panel with AI recommendations
- * - Deal probability tracking
- * - Activity timeline and quick actions
- *
- * Z-Index Hierarchy:
- * - Main content: z-0 (base)
- * - Detail panel overlay: z-[9998] (above all content)
- * - Detail panel: z-[9999] (topmost layer, above header)
- */
 
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Deal, DealStage } from '../types';
-import {
-  Search, Filter, Plus, MoreHorizontal, AlertCircle, Calendar,
-  FileText, Phone, Mail, X, Sparkles, ArrowRight, ChevronRight,
-  CheckSquare, Clock, ShieldCheck, DollarSign
+import { 
+  Search, Filter, Plus, MoreHorizontal, AlertCircle, Calendar, 
+  FileText, Phone, Mail, X, Sparkles, ArrowRight, ChevronRight, 
+  CheckSquare, Clock, ShieldCheck, DollarSign, UserCheck, Send
 } from 'lucide-react';
 import { Badge } from './ui/Badge';
 
-/**
- * Deal Pipeline Stages (9-column Kanban board)
- * Represents the complete sales funnel from initial contact to post-delivery
- */
+// --- STAGE DEFINITIONS (9 Columns) ---
 const STAGES: DealStage[] = [
-  'Lead Contacted',
-  'Appointment Set',
-  'Visit / Test Drive',
-  'Worksheet / Desking',
-  'Credit & Docs',
-  'F&I',
-  'Contract Signing',
-  'Delivery',
+  'Lead Contacted', 
+  'Appointment Set', 
+  'Visit / Test Drive', 
+  'Worksheet / Desking', 
+  'Credit & Docs', 
+  'F&I', 
+  'Contract Signing', 
+  'Delivery', 
   'Post Follow-up'
 ];
 
-/**
- * Mock Deal Data
- * Sample deals distributed across all pipeline stages
- */
+// --- MOCK DATA GENERATION ---
 const DEALS: Deal[] = [
   // 1. Lead Contacted
   { id: '101', customerName: 'Michael Corleone', leadSource: 'Web', year: '2025', vehicle: 'Porsche Panamera', trim: 'Turbo S', dealAmount: '$185,000', status: 'HOT', stage: 'Lead Contacted', lastActivity: 'Email Opened', lastActivityTime: '10m ago', nextAction: 'Call to qualify', probability: 15 },
@@ -79,23 +57,14 @@ const DEALS: Deal[] = [
   { id: '901', customerName: 'Nick Fury', leadSource: 'Campaign', year: '2024', vehicle: 'Cadillac Escalade', trim: 'V-Series', dealAmount: '$152,000', status: 'WARM', stage: 'Post Follow-up', lastActivity: 'Survey Sent', lastActivityTime: '2d ago', nextAction: 'Service Intro', probability: 100 },
 ];
 
-// ========================================
-// SUB-COMPONENTS
-// ========================================
+// --- COMPONENTS ---
 
-/**
- * KPI Item Component
- * Displays a single key performance indicator with trend
- * @param label - KPI label (e.g., "Deals Today")
- * @param value - Current value
- * @param trend - Trend indicator (e.g., "+3", "-1")
- * @param up - Trend direction (true = up/positive, false = down/negative)
- */
+// 1. KPI CARD (Micro version - Single Line)
 const KPIItem: React.FC<{ label: string; value: string; trend: string; up: boolean }> = ({ label, value, trend, up }) => (
-  <div className="bg-white rounded-[6px] shadow-sm border border-slate-200 px-4 py-3 flex flex-col justify-between h-[88px] min-w-[180px]">
+  <div className="bg-white rounded-[6px] shadow-sm border border-slate-200 px-4 flex items-center justify-between h-[44px] min-w-[180px]">
     <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{label}</span>
-    <div className="flex items-end justify-between">
-      <span className="text-2xl font-bold text-[#424651]">{value}</span>
+    <div className="flex items-center gap-3">
+      <span className="text-lg font-bold text-[#424651]">{value}</span>
       <div className={`flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-[4px] ${up ? 'bg-emerald-50 text-emerald-600' : 'bg-red-50 text-red-600'}`}>
         <span>{trend}</span>
         <span>{up ? '▲' : '▼'}</span>
@@ -104,32 +73,24 @@ const KPIItem: React.FC<{ label: string; value: string; trend: string; up: boole
   </div>
 );
 
-/**
- * Deal Card Component
- * Individual deal card displayed in Kanban columns
- * Shows customer info, vehicle details, status, and next actions
- * @param deal - Deal object with all details
- * @param onClick - Handler when card is clicked
- * @param isSelected - Whether this card is currently selected
- */
+// 2. DEAL CARD
 const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: boolean }> = ({ deal, onClick, isSelected }) => {
-  // Determine status badge color based on deal temperature
-  const statusColor =
-    deal.status === 'HOT' ? 'bg-[#E75A5A]' :
+  const statusColor = 
+    deal.status === 'HOT' ? 'bg-[#E75A5A]' : 
     deal.status === 'WARM' ? 'bg-[#F2A444]' : 'bg-[#8AA4FF]';
 
   return (
-    <div
+    <div 
       onClick={() => onClick(deal)}
       className={`
         w-full bg-white rounded-[6px] p-4 cursor-pointer transition-all duration-200 border relative group
-        ${isSelected
-          ? 'ring-2 ring-[#B4E975] shadow-md border-transparent z-10'
+        ${isSelected 
+          ? 'ring-2 ring-[#B4E975] shadow-card-hover border-transparent z-10 scale-[1.02]' 
           : 'border-slate-200 hover:border-slate-300 hover:shadow-card'
         }
       `}
     >
-      {/* Header: Customer Name + Deal Status Badge */}
+      {/* [1] Header: Name + Status */}
       <div className="flex justify-between items-start mb-1">
         <h3 className="text-[16px] font-bold text-[#424651] leading-tight group-hover:text-black transition-colors">
           {deal.customerName}
@@ -139,12 +100,12 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         </span>
       </div>
 
-      {/* Lead Source Label */}
+      {/* [2] Lead Source */}
       <div className="mb-2">
          <span className="text-[11px] font-medium text-slate-500">{deal.leadSource} Lead</span>
       </div>
 
-      {/* Vehicle Information */}
+      {/* [3] Vehicle Info */}
       <div className="mb-1">
         <p className="text-[14px] font-medium text-[#424651]">
           {deal.year} {deal.vehicle}
@@ -152,25 +113,21 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         <p className="text-[12px] text-slate-500">{deal.trim}</p>
       </div>
 
-      {/* Deal Amount */}
+      {/* [4] Amount */}
       <div className="flex justify-end mb-3">
         <span className="text-[14px] font-bold text-[#424651]">{deal.dealAmount}</span>
       </div>
 
-      {/* Divider */}
       <div className="h-px bg-slate-100 w-full mb-3"></div>
 
-      {/* Activity Timeline & Next Action */}
+      {/* [5] & [6] Activity & Next Action */}
       <div className="space-y-1.5">
-        {/* Last Activity */}
         <div className="flex items-center gap-1.5">
            <div className="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
            <p className="text-[11px] text-slate-500 truncate">
              {deal.lastActivity} · {deal.lastActivityTime}
            </p>
         </div>
-
-        {/* Next Action Badge */}
         {deal.nextAction && (
           <div className="flex items-center gap-1.5 text-indigo-600 bg-indigo-50 px-2 py-1 rounded-[4px] w-fit max-w-full">
              <ArrowRight size={10} />
@@ -179,7 +136,7 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
         )}
       </div>
 
-      {/* Missing Documents Alert Indicator */}
+      {/* Missing Docs Indicator */}
       {deal.missingDocs && (
         <div className="absolute top-[-4px] right-[-4px]">
            <span className="flex h-3 w-3 relative">
@@ -192,19 +149,94 @@ const DealCard: React.FC<{ deal: Deal; onClick: (d: Deal) => void; isSelected: b
   );
 };
 
-/**
- * Main Deals Screen Component
- * Full-page view of the deal management interface
- */
 export const DealsScreen: React.FC = () => {
-  // Selected deal state for detail panel
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
+  const [myDealsOnly, setMyDealsOnly] = useState(false); // State for My Deals toggle
+
+  // Checklist State Management
+  const [tasks, setTasks] = useState([
+     { id: 1, txt: 'Upload Driver License', done: true, urgent: false, due: 'Today' },
+     { id: 2, txt: 'Collect Deposit ($1,000)', done: false, urgent: true, due: 'Tomorrow' },
+     { id: 3, txt: 'Confirm Insurance Validity', done: false, urgent: true, due: '2 Days' },
+     { id: 4, txt: 'Sign Privacy Notice', done: false, urgent: false, due: '3 Days' },
+  ]);
+
+  const toggleTask = (id: number) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, done: !t.done } : t));
+  };
+
+  // Notes State Management
+  const [notes, setNotes] = useState<{id: number, text: string, author: string, time: string}[]>([
+      { id: 1, text: "Wife prefers the beige interior, but husband wants black. Need to find a compromise unit or check incoming inventory.", author: "Alex M.", time: "Yesterday" }
+  ]);
+  const [newNote, setNewNote] = useState('');
+
+  const handleAddNote = () => {
+      if (!newNote.trim()) return;
+      const note = {
+          id: Date.now(),
+          text: newNote,
+          author: "Alex M.",
+          time: "Just now"
+      };
+      setNotes([note, ...notes]);
+      setNewNote('');
+  };
 
   return (
     <div className="flex flex-col h-full bg-[#F7F7F7] overflow-hidden">
+      
+      {/* --- ACTION HEADER --- */}
+      <div className="shrink-0 bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between z-10">
+        
+        {/* LEFT: Search */}
+        <div className="flex items-center gap-2">
+            {/* Date Range Picker (Mock) */}
+           <button className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-[6px] text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
+              <Calendar size={16} className="text-slate-400" />
+              <span>This Month</span>
+              <ChevronRight size={14} className="text-slate-400 rotate-90" />
+           </button>
+           <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-500 transition-colors" size={16} />
+            <input 
+               type="text" 
+               placeholder="Search deals, people..." 
+               className="pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-[6px] text-sm text-slate-700 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 w-64 transition-all"
+            />
+           </div>
+           <div className="h-6 w-px bg-slate-300 mx-1"></div>
+           {/* Filter Button */}
+           <button className="flex items-center gap-2 px-3 py-2 bg-white border border-slate-200 rounded-[6px] text-sm font-medium text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
+              <Filter size={16} />
+              <span>Filter</span>
+           </button>
+        </div>
 
-      {/* ========== TOP KPI DASHBOARD ========== */}
-      {/* 4-column grid showing key metrics */}
+        {/* CENTER: Controls */}
+        <div className="flex items-center gap-3">
+           {/* My Deals Toggle */}
+           <button 
+             onClick={() => setMyDealsOnly(!myDealsOnly)}
+             className={`flex items-center gap-2 px-3 py-2 border rounded-[6px] text-sm font-medium transition-all ${
+                myDealsOnly 
+                ? 'bg-[#424651] border-[#424651] text-white shadow-sm' 
+                : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50 hover:border-slate-300'
+             }`}
+           >
+              <UserCheck size={16} className={myDealsOnly ? 'text-[#B4E975]' : 'text-slate-400'} />
+              <span>My Deals Only</span>
+           </button>
+           <div className="h-6 w-px bg-slate-300 mx-1"></div>
+           {/* RIGHT: New Deal */}
+            <button className="flex items-center gap-2 bg-[#424651] hover:bg-[#2d3038] text-white px-4 py-2 rounded-[6px] text-sm font-bold shadow-sm transition-all active:scale-95">
+               <Plus size={18} />
+               <span>New Deal</span>
+            </button>
+        </div>    
+      </div>
+
+      {/* --- TOP KPI BAR --- */}
       <div className="shrink-0 bg-[#F7F7F7] px-6 py-4 grid grid-cols-4 gap-4 border-b border-slate-200/50">
         <KPIItem label="Deals Today" value="12" trend="3" up={true} />
         <KPIItem label="Hot Deals" value="8" trend="2" up={true} />
@@ -212,46 +244,38 @@ export const DealsScreen: React.FC = () => {
         <KPIItem label="Appts Today" value="7" trend="0" up={true} />
       </div>
 
-      {/* ========== MAIN CONTENT AREA ========== */}
+      {/* --- MAIN CONTENT AREA --- */}
       <div className="flex-1 flex overflow-hidden relative">
-
-        {/* ===== KANBAN BOARD: 9-Column Deal Pipeline ===== */}
-        {/* Horizontal scrollable container for all pipeline stages */}
+        
+        {/* KANBAN BOARD */}
         <div className="flex-1 overflow-x-auto overflow-y-hidden">
            <div className="h-full px-6 py-4 flex gap-4 min-w-max pb-8">
-              {/* Iterate through all pipeline stages */}
               {STAGES.map((stage) => {
-                 // Filter deals for current stage
                  const stageDeals = DEALS.filter(d => d.stage === stage);
                  return (
                    <div key={stage} className="flex flex-col h-full w-[300px] shrink-0 align-top">
-                      {/* Stage Column Header */}
+                      {/* Column Header */}
                       <div className="flex items-center justify-between mb-4 pl-1 pr-2">
                          <div className="flex items-center gap-2">
                             <h4 className="text-[13px] font-bold text-[#424651] uppercase tracking-tight">{stage}</h4>
-                            {/* Deal count badge */}
                             <span className="bg-slate-200 text-slate-600 text-[10px] font-bold px-1.5 py-0.5 rounded-[4px]">
                                {stageDeals.length}
                             </span>
                          </div>
-                         {/* Column menu (future: stage actions) */}
                          <MoreHorizontal size={16} className="text-slate-400 cursor-pointer hover:text-slate-600" />
                       </div>
 
-                      {/* Drop Zone: Scrollable deal cards container */}
-                      {/* Ready for drag-and-drop implementation */}
+                      {/* Drop Zone */}
                       <div className="flex-1 flex flex-col gap-4 overflow-y-auto pb-20 pr-1 no-scrollbar">
-                         {/* Render all deals in this stage */}
                          {stageDeals.map(deal => (
-                           <DealCard
-                              key={deal.id}
-                              deal={deal}
-                              onClick={setSelectedDeal}
-                              isSelected={selectedDeal?.id === deal.id}
+                           <DealCard 
+                              key={deal.id} 
+                              deal={deal} 
+                              onClick={setSelectedDeal} 
+                              isSelected={selectedDeal?.id === deal.id} 
                            />
                          ))}
-
-                         {/* Empty State for columns with no deals */}
+                         {/* Empty State Stub */}
                          {stageDeals.length === 0 && (
                            <div className="h-24 border-2 border-dashed border-slate-200 rounded-[6px] flex items-center justify-center bg-slate-50/50">
                               <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">Empty</span>
@@ -264,25 +288,19 @@ export const DealsScreen: React.FC = () => {
            </div>
         </div>
 
-        {/* ========== DETAIL PANEL (Modal Overlay) ========== */}
-        {/* Displays when a deal card is clicked */}
-        {/* IMPORTANT: Uses z-[9998] and z-[9999] to ensure it appears above header (z-40) */}
-        {selectedDeal && (
+        {/* --- DETAIL PANEL (Portal Overlay + Slide-in) --- */}
+        {selectedDeal && createPortal(
           <>
-            {/* Background Overlay Dimmer */}
-            {/* z-[9998]: Above all content, below panel */}
-            {/* Clicking overlay closes the detail panel */}
-            <div
-              className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[9998] transition-opacity duration-300"
+            {/* Dimmer Overlay - z-90 to be above FABs (z-50) */}
+            <div 
+              className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[90] transition-opacity duration-300"
               onClick={() => setSelectedDeal(null)}
             ></div>
 
-            {/* Detail Panel Container */}
-            {/* z-[9999]: Topmost layer - above header (z-40), overlay (z-[9998]), and all other content */}
-            {/* Fixed positioning: top-0 ensures full-height modal from top of viewport */}
-            <div className="fixed top-0 right-0 w-[450px] md:w-[520px] h-screen bg-white z-[9999] shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-300 ease-out">
-
-               {/* ===== Panel Header ===== */}
+            {/* Panel Container - z-100 to be topmost */}
+            <div className="fixed top-0 right-0 w-[450px] md:w-[520px] h-screen bg-white z-[100] shadow-2xl border-l border-slate-200 flex flex-col animate-in slide-in-from-right duration-300 ease-out">
+               
+               {/* Header */}
                <div className="shrink-0 p-6 border-b border-slate-100 bg-white">
                   <div className="flex justify-between items-start mb-2">
                      <div>
@@ -303,10 +321,10 @@ export const DealsScreen: React.FC = () => {
                   </div>
                </div>
 
-               {/* ===== Scrollable Body Content ===== */}
+               {/* Scrollable Body */}
                <div className="flex-1 overflow-y-auto p-6 bg-white space-y-6">
-
-                  {/* Section 1: Vehicle Information Summary */}
+                  
+                  {/* 1. Vehicle Info Summary */}
                   <div className="flex items-start gap-4 p-4 bg-[#F7F7F7] rounded-[6px] border border-slate-100">
                       <div className="w-12 h-12 bg-white rounded-[6px] border border-slate-200 flex items-center justify-center shrink-0">
                          <CheckSquare size={20} className="text-slate-400" />
@@ -318,8 +336,7 @@ export const DealsScreen: React.FC = () => {
                       </div>
                   </div>
 
-                  {/* Section 2: AI-Powered Recommendation */}
-                  {/* Dark-themed AI insight card with actionable suggestions */}
+                  {/* 2. AI Recommendation (Dark Mode) */}
                   <div className="bg-[#424651] rounded-[6px] p-5 shadow-sm relative overflow-hidden group">
                      <div className="absolute top-[-10%] right-[-10%] opacity-10 rotate-12">
                         <Sparkles size={100} className="text-white" />
@@ -339,24 +356,21 @@ export const DealsScreen: React.FC = () => {
                      </button>
                   </div>
 
-                  {/* Section 3: Deal Closing Probability */}
-                  {/* Visual progress bar showing likelihood of deal closure */}
+                  {/* 3. Deal Probability */}
                   <div>
                      <div className="flex justify-between items-end mb-2">
                         <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Closing Probability</h4>
                         <span className="text-sm font-bold text-[#424651]">{selectedDeal.probability}%</span>
                      </div>
-                     {/* Progress bar - color changes based on probability */}
                      <div className="h-2.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full rounded-full ${selectedDeal.probability && selectedDeal.probability > 50 ? 'bg-[#424651]' : 'bg-slate-400'}`}
+                        <div 
+                          className={`h-full rounded-full ${selectedDeal.probability && selectedDeal.probability > 50 ? 'bg-[#424651]' : 'bg-slate-400'}`} 
                           style={{ width: `${selectedDeal.probability}%` }}
                         ></div>
                      </div>
                   </div>
 
-                  {/* Section 4: Quick Actions Grid */}
-                  {/* 8-button grid for common deal operations */}
+                  {/* 4. Quick Actions Grid */}
                   <div>
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-3">Quick Actions</h4>
                      <div className="grid grid-cols-4 gap-2">
@@ -365,10 +379,10 @@ export const DealsScreen: React.FC = () => {
                            { icon: Mail, label: 'Email' },
                            { icon: Calendar, label: 'Book' },
                            { icon: FileText, label: 'Quote' },
-                           { icon: ShieldCheck, label: 'Verify' },
-                           { icon: DollarSign, label: 'Desk' },
-                           { icon: Clock, label: 'Log' },
-                           { icon: MoreHorizontal, label: 'More' }
+                           //{ icon: ShieldCheck, label: 'Verify' },
+                           //{ icon: DollarSign, label: 'Desk' },
+                           //{ icon: Clock, label: 'Log' },
+                           //{ icon: MoreHorizontal, label: 'More' }
                         ].map((action, i) => (
                            <button key={i} className="flex flex-col items-center justify-center gap-1.5 p-3 bg-white border border-slate-200 rounded-[6px] hover:bg-slate-50 hover:border-slate-300 transition-all">
                               <action.icon size={18} className="text-[#424651]" />
@@ -378,34 +392,58 @@ export const DealsScreen: React.FC = () => {
                      </div>
                   </div>
 
-                  {/* Section 5: Required Tasks Checklist */}
-                  {/* Interactive checklist of tasks needed to progress the deal */}
+                  {/* 5. Required Tasks Checklist (Interactive) */}
                   <div>
                      <div className="flex items-center justify-between mb-3">
                         <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide">Required Tasks</h4>
-                        {/* Urgent task counter badge */}
-                        <span className="text-[10px] font-bold text-orange-500 bg-orange-50 px-1.5 py-0.5 rounded-[4px]">2 Urgent</span>
+                        <div className="flex gap-2">
+                            <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-[4px]">
+                                {tasks.filter(t => t.done).length}/{tasks.length} Done
+                            </span>
+                            {tasks.some(t => t.urgent && !t.done) && (
+                                <span className="text-[10px] font-bold text-orange-500 bg-orange-50 px-1.5 py-0.5 rounded-[4px]">Action Req</span>
+                            )}
+                        </div>
                      </div>
                      <div className="space-y-2">
-                        {[
-                           { txt: 'Upload Driver License', done: true },
-                           { txt: 'Collect Deposit ($1,000)', done: false, urgent: true },
-                           { txt: 'Confirm Insurance Validity', done: false, urgent: true },
-                           { txt: 'Sign Privacy Notice', done: false, urgent: false },
-                        ].map((task, i) => (
-                           <div key={i} className="flex items-center gap-3 p-3 bg-white rounded-[6px] border border-slate-100 hover:border-slate-200 transition-colors cursor-pointer group">
-                               <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${task.done ? 'bg-[#424651] border-[#424651]' : 'border-slate-300 group-hover:border-slate-400'}`}>
-                                  {task.done && <div className="w-2 h-2 bg-white rounded-[1px]"></div>}
+                        {tasks.map((task) => (
+                           <div 
+                             key={task.id} 
+                             onClick={() => toggleTask(task.id)}
+                             className={`flex items-center gap-3 p-3 bg-white rounded-[6px] border transition-colors cursor-pointer group ${
+                                 task.done ? 'border-slate-100' : 'border-slate-200 hover:border-indigo-300'
+                             }`}
+                           >
+                               <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors shrink-0 ${
+                                   task.done 
+                                   ? 'bg-[#424651] border-[#424651]' 
+                                   : 'border-slate-300 group-hover:border-indigo-400 bg-white'
+                               }`}>
+                                  {task.done && <div className="w-1.5 h-1.5 bg-white rounded-[1px]"></div>}
                                </div>
-                               <span className={`text-xs font-medium flex-1 ${task.done ? 'text-slate-400 line-through' : 'text-[#424651]'}`}>{task.txt}</span>
-                               {task.urgent && !task.done && <AlertCircle size={14} className="text-[#E75A5A]" />}
+                               
+                               <div className="flex-1 min-w-0">
+                                   <p className={`text-xs font-medium truncate ${task.done ? 'text-slate-400 line-through' : 'text-[#424651]'}`}>
+                                       {task.txt}
+                                   </p>
+                               </div>
+
+                               <div className="flex items-center gap-2 shrink-0">
+                                   {!task.done && (
+                                       <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                                           task.urgent ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-500'
+                                       }`}>
+                                           Due: {task.due}
+                                       </span>
+                                   )}
+                                   {task.urgent && !task.done && <AlertCircle size={14} className="text-[#E75A5A]" />}
+                               </div>
                            </div>
                         ))}
                      </div>
                   </div>
 
-                  {/* Section 6: Activity Timeline */}
-                  {/* Chronological history of all deal-related activities */}
+                  {/* 6. Timeline */}
                   <div>
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-4">Activity Timeline</h4>
                      <div className="pl-2 border-l-2 border-slate-100 space-y-6">
@@ -432,22 +470,54 @@ export const DealsScreen: React.FC = () => {
                      </button>
                   </div>
 
-                  {/* Section 7: Internal Notes */}
-                  {/* Sticky note style area for private deal notes */}
+                  {/* 7. Internal Notes (Interactive) */}
                   <div className="pb-10">
                      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-3">Internal Notes</h4>
-                     {/* Yellow sticky note design for visibility */}
-                     <div className="bg-[#fff9c4] p-3 rounded-[6px] border border-yellow-200 shadow-sm">
-                        <p className="text-xs text-yellow-900 leading-relaxed font-medium">
-                           "Wife prefers the beige interior, but husband wants black. Need to find a compromise unit or check incoming inventory."
-                        </p>
-                        <p className="text-[10px] text-yellow-700/60 mt-2 font-bold text-right">- Alex M.</p>
+                     
+                     {/* Add New Note */}
+                     <div className="flex gap-2 mb-4">
+                        <input 
+                           type="text" 
+                           value={newNote}
+                           onChange={(e) => setNewNote(e.target.value)}
+                           onKeyDown={(e) => e.key === 'Enter' && handleAddNote()}
+                           placeholder="Add a quick note..."
+                           className="flex-1 text-xs border border-slate-200 rounded-[6px] px-3 py-2 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+                        />
+                        <button 
+                           onClick={handleAddNote}
+                           disabled={!newNote.trim()}
+                           className="bg-[#424651] text-white p-2 rounded-[6px] hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                           <Send size={14} />
+                        </button>
+                     </div>
+
+                     {/* Notes List */}
+                     <div className="space-y-3">
+                        {notes.map((note) => (
+                           <div key={note.id} className="bg-[#fff9c4] p-3 rounded-[6px] border border-yellow-200 shadow-sm relative group">
+                              <p className="text-xs text-yellow-900 leading-relaxed font-medium">
+                                 "{note.text}"
+                              </p>
+                              <div className="flex items-center justify-end gap-1 mt-2">
+                                 <p className="text-[10px] text-yellow-700/60 font-bold">- {note.author}</p>
+                                 <span className="text-[9px] text-yellow-700/40">• {note.time}</span>
+                              </div>
+                           </div>
+                        ))}
+                        {notes.length === 0 && (
+                           <div className="text-center py-4 border-2 border-dashed border-slate-100 rounded-[6px]">
+                              <p className="text-xs text-slate-400">No notes yet.</p>
+                           </div>
+                        )}
                      </div>
                   </div>
 
                </div>
             </div>
-          </>
+          </>,
+          document.body
         )}
 
       </div>
@@ -455,14 +525,7 @@ export const DealsScreen: React.FC = () => {
   );
 };
 
-// ========================================
-// HELPER COMPONENTS & ICONS
-// ========================================
-
-/**
- * UserPlus Icon Component
- * Custom SVG icon for user addition in timeline
- */
+// Helper for icon in mock data
 function UserPlus(props: any) {
   return (
     <svg 

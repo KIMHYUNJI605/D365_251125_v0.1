@@ -77,3 +77,39 @@ export interface Deal {
   missingDocs?: boolean;
   probability?: number;
 }
+
+// --- CONFIGURATOR TYPES ---
+
+export interface Trim {
+  id: string;
+  name: string;
+  price: number;
+}
+
+export interface VehicleModel {
+  id: string;
+  brand: 'Porsche' | 'BMW' | 'Mercedes-Benz' | 'Hyundai';
+  name: string;
+  basePrice: number;
+  imageColor: string; // Placeholder for image
+  trims: Trim[];
+  stockStatus: 'In Stock' | 'Low Stock' | 'Arriving Soon';
+}
+
+export interface ConfigOption {
+  id: string;
+  name: string;
+  price: number;
+  type: 'color' | 'interior' | 'wheel' | 'package' | 'accessory';
+  value?: string; // Hex code for colors
+  description?: string;
+}
+
+export interface ConfigurationState {
+  model: VehicleModel;
+  trim: Trim;
+  exteriorColor: ConfigOption;
+  interiorColor: ConfigOption;
+  wheels: ConfigOption;
+  packages: ConfigOption[];
+}

@@ -1,41 +1,17 @@
-/**
- * Header Component for Dealer365 TOBE
- *
- * Purpose: Global navigation header with responsive design
- * Features:
- * - Logo and branding
- * - Main navigation (Dashboard, Deals, Inventory, Test Drives)
- * - CRM/Config mode toggle
- * - User profile display
- * - Responsive mobile menu with drawer
- * - Search functionality
- *
- * Z-Index: z-40 (below modals but above main content)
- */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Menu, X, Search, ChevronDown } from 'lucide-react';
 
-/**
- * Header Props
- * @param currentView - Current active view ('dashboard' | 'deals')
- * @param onNavigate - Navigation handler callback
- */
 interface HeaderProps {
-  currentView?: 'dashboard' | 'deals';
-  onNavigate?: (view: 'dashboard' | 'deals') => void;
+  currentView?: 'dashboard' | 'deals' | 'config';
+  onNavigate?: (view: 'dashboard' | 'deals' | 'config') => void;
 }
 
-/**
- * Navigation Item Component
- * Renders individual navigation links with active state
- * Supports both desktop and mobile layouts
- */
-const NavItem: React.FC<{
-  label: string;
-  active?: boolean;
+const NavItem: React.FC<{ 
+  label: string; 
+  active?: boolean; 
   mobile?: boolean;
-  onClick?: () => void;
+  onClick?: () => void; 
 }> = ({ label, active, mobile, onClick }) => (
   <button
     onClick={onClick}
@@ -58,32 +34,30 @@ const NavItem: React.FC<{
   </button>
 );
 
-/**
- * Main Header Component
- * Renders the global navigation header for Dealer365 TOBE
- */
 export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNavigate }) => {
-  // System mode state: CRM or Config
-  const [mode, setMode] = useState<'CRM' | 'Config'>('CRM');
-
-  // Mobile menu toggle state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // Derive mode from currentView
+  const mode = currentView === 'config' ? 'Config' : 'CRM';
 
-  /**
-   * Navigation handler
-   * Closes mobile menu and triggers navigation callback
-   */
-  const handleNav = (view: 'dashboard' | 'deals') => {
+  const handleNav = (view: 'dashboard' | 'deals' | 'config') => {
     if (onNavigate) onNavigate(view);
     setMobileMenuOpen(false);
   };
 
+  const setMode = (newMode: 'CRM' | 'Config') => {
+      if (newMode === 'CRM') {
+          handleNav('dashboard');
+      } else {
+          handleNav('config');
+      }
+  };
+
   return (
     <>
-      {/* Main Header Bar - Fixed height 56px, z-40 positioning */}
       <header className="h-[56px] bg-white border-b border-slate-200 flex items-center justify-between shrink-0 relative z-40 shadow-sm">
-
-        {/* ========== LEFT SECTION: Logo & Branding ========== */}
+        
+        {/* LEFT: Logo (Columns 1-3) */}
         <div className="flex items-center h-full pl-8 shrink-0 w-auto cursor-pointer" onClick={() => handleNav('dashboard')}>
           <div className="flex items-center gap-2.5">
             <div className="w-7 h-7 bg-slate-900 rounded-md flex items-center justify-center text-white font-bold text-sm shadow-sm">D</div>
@@ -91,32 +65,28 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
           </div>
         </div>
 
-        {/* ========== CENTER SECTION: Main Navigation ========== */}
-        {/* Hidden on mobile (< md), visible on tablet and desktop */}
+        {/* CENTER: Navigation (Columns 4-9) */}
         <div className="hidden md:flex items-center justify-center gap-4 lg:gap-6 flex-1 h-full px-4 overflow-hidden">
-          <div className="flex items-center gap-1">
-            {/* Primary Navigation Items */}
-            <NavItem label="Dashboard" active={currentView === 'dashboard'} onClick={() => handleNav('dashboard')} />
-            <NavItem label="Deals" active={currentView === 'deals'} onClick={() => handleNav('deals')} />
-            <NavItem label="Inventory" />
-            <NavItem label="Test Drives" />
-
-            {/* 'More' menu - visible only on large screens */}
-            <div className="hidden lg:block">
-                <NavItem label="More" />
+          {mode === 'CRM' ? (
+            <div className="flex items-center gap-1">
+                <NavItem label="Dashboard" active={currentView === 'dashboard'} onClick={() => handleNav('dashboard')} />
+                <NavItem label="Deals" active={currentView === 'deals'} onClick={() => handleNav('deals')} />
+                <NavItem label="Inventory" />
+                <NavItem label="Test Drives" />
+                <div className="hidden lg:block">
+                    <NavItem label="More" />
+                </div>
             </div>
-
-            {/* 'More' dropdown trigger for tablet view */}
-            <div className="lg:hidden">
-                 <button className="px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-slate-800 flex items-center gap-1">
-                    More <ChevronDown size={14} />
-                 </button>
+          ) : (
+            <div className="flex items-center gap-1">
+                <NavItem label="Select Model" active={true} />
+                <NavItem label="Saved Builds" />
+                <NavItem label="Comparison" />
             </div>
-          </div>
+          )}
         </div>
 
-        {/* ========== RIGHT SECTION: Actions & User Profile ========== */}
-        {/* Hidden on mobile, visible on tablet and desktop */}
+        {/* RIGHT: Actions (Columns 10-12) */}
         <div className="hidden md:flex items-center justify-end pr-8 gap-5 shrink-0 h-full">
           
           {/* Search Icon */}
@@ -124,30 +94,26 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
              <Search size={20} strokeWidth={2} />
           </button>
 
-          {/* Visual Separator */}
+          {/* Vertical Divider */}
           <div className="h-6 w-px bg-slate-200" />
 
-          {/* ===== CRM/Config Mode Toggle ===== */}
-          {/* Allows users to switch between CRM operations and Configuration mode */}
+          {/* CRM/Config Toggle */}
           <div className="bg-slate-100 p-1 rounded-lg flex shrink-0 relative h-8 items-center">
-            {/* CRM Mode Button */}
             <button
               onClick={() => setMode('CRM')}
               className={`px-4 h-full rounded-md text-[11px] font-bold tracking-wide transition-all duration-200 ease-out z-10 ${
-                mode === 'CRM'
-                ? 'bg-slate-900 text-white shadow-sm'
+                mode === 'CRM' 
+                ? 'bg-slate-900 text-white shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700 bg-transparent'
               }`}
             >
               CRM
             </button>
-
-            {/* Config Mode Button */}
             <button
               onClick={() => setMode('Config')}
               className={`px-4 h-full rounded-md text-[11px] font-bold tracking-wide transition-all duration-200 ease-out z-10 ${
-                mode === 'Config'
-                ? 'bg-slate-900 text-white shadow-sm'
+                mode === 'Config' 
+                ? 'bg-slate-900 text-white shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700 bg-transparent'
               }`}
             >
@@ -155,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
             </button>
           </div>
 
-          {/* ===== User Profile Display ===== */}
+          {/* User Profile */}
           <div className="flex items-center gap-3 pl-2">
               <p className="text-xs font-semibold text-slate-700 whitespace-nowrap">
                   Alex M. <span className="text-slate-400 font-normal">(Sales Exec)</span>
@@ -166,9 +132,8 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
           </div>
         </div>
 
-        {/* ========== MOBILE MENU TOGGLE ========== */}
-        {/* Visible only on mobile screens (< md) */}
-        <button
+        {/* MOBILE MENU TOGGLE (Visible only on SM) */}
+        <button 
           className="md:hidden p-4 text-slate-700 hover:bg-slate-50"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
@@ -176,9 +141,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
         </button>
       </header>
 
-      {/* ========== MOBILE NAVIGATION DRAWER ========== */}
-      {/* Slide-down menu for mobile devices */}
-      {/* Z-index: z-30 (below header z-40 and detail panels) */}
+      {/* MOBILE DRAWER */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 top-[56px] z-30 bg-slate-900/50 backdrop-blur-sm md:hidden">
           <div className="bg-white w-full shadow-xl border-b border-slate-200 animate-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-56px)] overflow-auto">
@@ -196,7 +159,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
               
               <div className="h-px bg-slate-100 my-1" />
 
-              {/* Mobile Navigation Items */}
               <NavItem label="Dashboard" active={currentView === 'dashboard'} mobile onClick={() => handleNav('dashboard')} />
               <NavItem label="Deals" active={currentView === 'deals'} mobile onClick={() => handleNav('deals')} />
               <NavItem label="Inventory" mobile />
@@ -204,8 +166,7 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
               <NavItem label="More" mobile />
 
               <div className="h-px bg-slate-100 my-1" />
-
-              {/* Mobile CRM/Config Toggle Section */}
+              
               <div className="px-4 py-2">
                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">System Mode</p>
                 <div className="bg-slate-100 p-1 rounded-lg flex w-full">
@@ -229,7 +190,6 @@ export const Header: React.FC<HeaderProps> = ({ currentView = 'dashboard', onNav
               </div>
             </div>
           </div>
-          {/* Overlay click area to close mobile menu */}
           <div className="flex-1" onClick={() => setMobileMenuOpen(false)} />
         </div>
       )}

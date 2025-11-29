@@ -80,9 +80,15 @@ export interface Deal {
 // --- CONFIGURATOR TYPES ---
 
 export interface Trim {
-  id: string;
+  id: string; // mapped from trimId
   name: string;
   price: number;
+}
+
+export interface VehicleImages {
+  thumbnail: string;
+  hero: string;
+  angles?: string[];
 }
 
 export interface VehicleSpecs {
@@ -92,12 +98,13 @@ export interface VehicleSpecs {
 }
 
 export interface VehicleModel {
-  id: string;
-  brand: 'Porsche' | 'BMW' | 'Mercedes-Benz' | 'Hyundai';
+  id: string; // mapped from modelId
+  brand: string;
   name: string;
-  basePrice: number;
-  imageColor: string; // Keep for fallback
-  imageUrl?: string; // New: Real Image URL
+  basePrice: number; // Derived from first trim
+  imageColor?: string; // Legacy fallback
+  imageUrl?: string; // Legacy fallback
+  images?: VehicleImages; // New Structure
   trims: Trim[];
   stockStatus: 'In Stock' | 'Low Stock' | 'Arriving Soon';
   specs?: VehicleSpecs;

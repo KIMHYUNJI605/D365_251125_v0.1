@@ -1,4 +1,3 @@
-
 export interface KPI {
   id: string;
   label: string;
@@ -86,14 +85,22 @@ export interface Trim {
   price: number;
 }
 
+export interface VehicleSpecs {
+    hp: number;
+    mpg: string; // e.g. "22/28"
+    zeroSixty: string; // e.g. "4.2s"
+}
+
 export interface VehicleModel {
   id: string;
   brand: 'Porsche' | 'BMW' | 'Mercedes-Benz' | 'Hyundai';
   name: string;
   basePrice: number;
-  imageColor: string; // Placeholder for image
+  imageColor: string; // Keep for fallback
+  imageUrl?: string; // New: Real Image URL
   trims: Trim[];
   stockStatus: 'In Stock' | 'Low Stock' | 'Arriving Soon';
+  specs?: VehicleSpecs;
 }
 
 export interface ConfigOption {

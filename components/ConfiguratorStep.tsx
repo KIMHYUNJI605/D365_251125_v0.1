@@ -1,33 +1,125 @@
-
 import React, { useState } from 'react';
 import { VehicleModel, Trim, ConfigOption } from '../types';
-import { ChevronLeft, ChevronRight, Info, RotateCw, Check, Sparkles, AlertTriangle, Layers, Palette, Circle, Package, Sliders, ChevronDown } from 'lucide-react';
+import { 
+    ChevronLeft, ChevronRight, ChevronDown, ChevronUp, 
+    RotateCw, Info, Check, Sparkles, AlertTriangle, 
+    Layers, Palette, Circle, Package, Sliders, 
+    Zap, Shield, Music, Grid, Sun, Aperture, 
+    Power, Lightbulb, Disc, Thermometer, X,
+    Maximize2, ArrowLeft, ArrowRight
+} from 'lucide-react';
 
-// --- DUMMY OPTIONS ---
+// --- EXPANDED DUMMY OPTIONS ---
 const EXTERIOR_COLORS: ConfigOption[] = [
     { id: 'black', name: 'Jet Black Metallic', price: 0, type: 'color', value: '#000000' },
-    { id: 'white', name: 'Carrara White', price: 0, type: 'color', value: '#FFFFFF' },
+    { id: 'white', name: 'Carrara White', price: 0, type: 'color', value: '#F5F5F5' },
     { id: 'graphite', name: 'Graphite Grey', price: 800, type: 'color', value: '#374151' },
     { id: 'red', name: 'Carmine Red', price: 3200, type: 'color', value: '#B91C1C' },
+    { id: 'blue', name: 'Gentian Blue', price: 1200, type: 'color', value: '#1E3A8A' },
 ];
 
 const INTERIOR_COLORS: ConfigOption[] = [
     { id: 'int_black', name: 'Black Leather', price: 0, type: 'interior', value: '#111827' },
     { id: 'int_beige', name: 'Mojave Beige', price: 0, type: 'interior', value: '#D2B48C' },
-    { id: 'int_blue', name: 'Graphite Blue / Chalk', price: 4200, type: 'interior', value: '#1e3a8a' },
+    { id: 'int_red', name: 'Bordeaux Red', price: 4200, type: 'interior', value: '#7F1D1D' },
 ];
 
 const WHEELS: ConfigOption[] = [
-    { id: 'w19', name: '19" Standard Wheels', price: 0, type: 'wheel' },
-    { id: 'w20', name: '20" Sport Aero Wheels', price: 2100, type: 'wheel' },
-    { id: 'w21', name: '21" RS Spyder Design', price: 3800, type: 'wheel' },
+    { id: 'w19', name: '19" Standard Aero', price: 0, type: 'wheel' },
+    { id: 'w20', name: '20" Sport Design', price: 2100, type: 'wheel' },
+    { id: 'w21', name: '21" RS Spyder', price: 3800, type: 'wheel' },
 ];
 
-const PACKAGES: ConfigOption[] = [
-    { id: 'pkg_prem', name: 'Premium Package', price: 5400, type: 'package', description: 'Includes Panoramic Roof, Bose Sound, Ambient Lighting.' },
-    { id: 'pkg_sport', name: 'Sport Chrono Package', price: 3200, type: 'package', description: 'Includes Mode Switch, Launch Control, Sport Response.' },
-    { id: 'pkg_assist', name: 'Driver Assistance', price: 2800, type: 'package', description: 'Includes ACC, Lane Keep, Night Vision.' },
+const OPTIONS_CATEGORIES = {
+    Safety: [
+        { id: 'safe1', name: 'Lane Change Assist', price: 900, type: 'package', description: 'Monitors rear blind spots.' },
+        { id: 'safe2', name: 'Surround View', price: 1200, type: 'package', description: '360-degree camera system.' },
+    ],
+    Convenience: [
+        { id: 'conv1', name: 'Soft Close Doors', price: 700, type: 'package', description: 'Gently pulls doors shut.' },
+        { id: 'conv2', name: 'Ambient Lighting', price: 500, type: 'package', description: 'Customizable interior colored LED.' },
+    ],
+    Tech: [
+        { id: 'tech1', name: 'Burmester Sound', price: 5800, type: 'package', description: 'High-end 3D Surround Sound.' },
+        { id: 'tech2', name: 'Head-Up Display', price: 1500, type: 'package', description: 'Projects info onto windshield.' },
+    ],
+    Accessories: [
+        { id: 'acc1', name: 'Roof Rails Aluminum', price: 400, type: 'accessory', description: 'Required for roof transport systems.' },
+    ]
+};
+
+const KSP_POINTS = [
+    { id: 1, x: 32, y: 45, title: 'Matrix LED', desc: '84 individually controlled LEDs.' },
+    { id: 2, x: 62, y: 60, title: '21" Forged', desc: 'Lightweight alloy construction.' },
+    { id: 3, x: 48, y: 25, title: 'Panoramic', desc: 'Fixed glass roof with 95% tint.' },
 ];
+
+const RADIAL_ITEMS = [
+    { id: 'light', icon: Lightbulb, label: 'Lights' },
+    { id: 'wiper', icon: Disc, label: 'Wipers' }, // Disc used as placeholder for wiper movement
+    { id: 'door', icon: LogInIcon, label: 'Doors' },
+    { id: 'trunk', icon: ArrowUpIcon, label: 'Trunk' },
+    { id: 'start', icon: Power, label: 'Start' },
+];
+
+// Helper Icons
+function LogInIcon(props: any) { return <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" x2="3" y1="12" y2="12"/></svg>; }
+function ArrowUpIcon(props: any) { return <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>; }
+
+
+// --- COMPONENTS ---
+
+const Accordion: React.FC<{ title: string; isOpen: boolean; onToggle: () => void; children: React.ReactNode }> = ({ title, isOpen, onToggle, children }) => (
+    <div className="border-b border-slate-100 last:border-0">
+        <button onClick={onToggle} className="w-full py-4 flex items-center justify-between text-slate-800 hover:text-slate-600 transition-colors">
+            <span className="text-sm font-bold uppercase tracking-wider">{title}</span>
+            {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+        </button>
+        <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${isOpen ? 'max-h-[800px]' : 'max-h-0'}`}>
+            <div className="pb-6 pt-1 space-y-3">
+                {children}
+            </div>
+        </div>
+    </div>
+);
+
+const OptionCard: React.FC<{ 
+    label: string; 
+    price: number; 
+    active: boolean; 
+    onClick: () => void; 
+    description?: string;
+    colorValue?: string;
+    image?: boolean 
+}> = ({ label, price, active, onClick, description, colorValue }) => (
+    <div 
+        onClick={onClick}
+        className={`relative p-4 rounded-[6px] border transition-all cursor-pointer group flex items-start gap-3 ${
+            active 
+            ? 'border-indigo-600 bg-indigo-50/10 shadow-sm' 
+            : 'border-slate-200 bg-white hover:shadow-md hover:border-slate-300'
+        }`}
+    >
+        {colorValue && (
+            <div 
+                className={`w-8 h-8 rounded-full border shadow-sm shrink-0 ${active ? 'ring-2 ring-offset-2 ring-indigo-600 border-transparent' : 'border-slate-200'}`}
+                style={{ backgroundColor: colorValue }}
+            />
+        )}
+        <div className="flex-1 min-w-0">
+            <div className="flex justify-between items-center mb-1">
+                <span className={`text-sm font-bold ${active ? 'text-indigo-900' : 'text-slate-800'}`}>{label}</span>
+                <span className={`text-xs font-semibold ${active ? 'text-indigo-700' : 'text-slate-500'}`}>
+                    {price === 0 ? 'Std' : `+$${price.toLocaleString()}`}
+                </span>
+            </div>
+            {description && (
+                <p className="text-[11px] text-slate-500 leading-snug line-clamp-2">{description}</p>
+            )}
+        </div>
+        {active && <div className="absolute top-4 right-4"><Check size={14} className="text-indigo-600" /></div>}
+    </div>
+);
 
 interface Props {
     model: VehicleModel;
@@ -36,361 +128,299 @@ interface Props {
 }
 
 export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
-    // State
-    const [leftOpen, setLeftOpen] = useState(true);
-    const [aiOpen, setAiOpen] = useState(false);
+    // Layout State
+    const [sectionsOpen, setSectionsOpen] = useState({
+        trim: true,
+        exterior: true,
+        interior: false,
+        options: false
+    });
     
+    // Feature State
+    const [kspActive, setKspActive] = useState(false);
+    const [radialOpen, setRadialOpen] = useState(false);
+    const [view, setView] = useState<'Front' | 'Side' | 'Rear' | 'Interior'>('Front');
+    const [activeKsp, setActiveKsp] = useState<number | null>(null);
+
     // Config State
     const [extColor, setExtColor] = useState(EXTERIOR_COLORS[0]);
     const [intColor, setIntColor] = useState(INTERIOR_COLORS[0]);
-    const [wheel, setWheel] = useState(WHEELS[0]);
-    const [selectedPackages, setSelectedPackages] = useState<string[]>([]);
-    
-    // UI State
-    const [angle, setAngle] = useState<'Front' | 'Side' | 'Rear' | 'Interior'>('Front');
-    const [paymentMode, setPaymentMode] = useState<'Loan' | 'Lease'>('Loan');
+    const [selectedOpts, setSelectedOpts] = useState<string[]>([]);
 
-    const togglePackage = (id: string) => {
-        if (selectedPackages.includes(id)) {
-            setSelectedPackages(prev => prev.filter(p => p !== id));
-        } else {
-            setSelectedPackages(prev => [...prev, id]);
-        }
+    const toggleSection = (key: keyof typeof sectionsOpen) => {
+        setSectionsOpen(prev => ({ ...prev, [key]: !prev[key] }));
     };
 
-    // Calculate Totals
-    const packagesCost = PACKAGES.filter(p => selectedPackages.includes(p.id)).reduce((acc, curr) => acc + curr.price, 0);
-    const optionsTotal = extColor.price + intColor.price + wheel.price + packagesCost;
-    const totalPrice = trim.price + optionsTotal + 1650; // + Destination
-    const estimatedTax = totalPrice * 0.0825;
-    const grandTotal = totalPrice + estimatedTax;
-    
-    // Estimate Payment (Simple calc for demo)
-    const downPayment = 10000;
-    const loanTerm = 60;
-    const loanRate = 0.059;
-    const principal = grandTotal - downPayment;
-    const monthlyPayment = Math.floor((principal * (loanRate/12) * Math.pow(1 + loanRate/12, loanTerm)) / (Math.pow(1 + loanRate/12, loanTerm) - 1));
+    const toggleOption = (id: string) => {
+        setSelectedOpts(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+    };
 
+    // Calculations
+    const allOptions = [
+        ...OPTIONS_CATEGORIES.Safety, 
+        ...OPTIONS_CATEGORIES.Convenience, 
+        ...OPTIONS_CATEGORIES.Tech, 
+        ...OPTIONS_CATEGORIES.Accessories
+    ];
+    const optionsCost = selectedOpts.reduce((sum, id) => sum + (allOptions.find(o => o.id === id)?.price || 0), 0) 
+                        + extColor.price + intColor.price;
+    const total = trim.price + optionsCost;
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 overflow-hidden relative">
-            {/* 2.1 Title Row */}
-            <div className="h-12 bg-white border-b border-slate-200 px-6 flex items-center justify-between shrink-0 z-20">
-                <div className="flex items-center gap-4">
-                    <button onClick={onBack} className="text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center gap-1">
-                        <ChevronLeft size={14} /> Change Model
-                    </button>
-                    <div className="h-4 w-px bg-slate-200"></div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold text-slate-900">{model.brand} {model.name}</span>
-                        <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-bold uppercase">{trim.name}</span>
-                    </div>
+        <div className="flex flex-col h-full bg-white overflow-hidden">
+            
+            {/* 1. HEADER */}
+            <div className="h-[68px] bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0 z-30 relative">
+                <div className="flex flex-col">
+                    <h1 className="text-lg font-bold text-slate-900 leading-tight">{model.brand} {model.name}</h1>
+                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">{trim.name} Trim</span>
                 </div>
-                <div className="text-[10px] font-medium text-slate-400 flex items-center gap-1">
-                    <Check size={12} /> Auto-saved 2 min ago
+                <div className="flex items-center gap-3">
+                    <button 
+                        onClick={onBack}
+                        className="px-4 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-[6px] transition-colors"
+                    >
+                        Change Model
+                    </button>
+                    {/* Simulated "Switch to CRM" - In a real app this would use nav context */}
+                    <button className="px-4 py-2 text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-[6px] transition-colors">
+                        Switch to CRM
+                    </button>
                 </div>
             </div>
 
-            {/* MAIN CONTENT ROW */}
-            <div className="flex-1 flex overflow-hidden relative">
+            {/* 3. LAYOUT STRUCTURE (Hard Split) */}
+            <div className="flex flex-1 overflow-hidden relative">
                 
-                {/* 2.3 LEFT OPTIONS PANEL */}
-                <div className={`${leftOpen ? 'w-[320px]' : 'w-[56px]'} bg-white border-r border-slate-200 transition-all duration-300 flex flex-col z-10 relative`}>
-                    <button 
-                        onClick={() => setLeftOpen(!leftOpen)}
-                        className="absolute -right-3 top-4 w-6 h-6 bg-white border border-slate-200 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-800 shadow-sm z-20"
-                    >
-                        {leftOpen ? <ChevronLeft size={14} /> : <ChevronRight size={14} />}
-                    </button>
+                {/* 2. LEFT PANEL (Fixed 360px) */}
+                <div className="w-[360px] flex flex-col border-r border-slate-200 bg-white relative z-20 shrink-0">
+                    
+                    {/* Scrollable Content */}
+                    <div className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-2 pb-32">
+                        
+                        {/* Trim Section */}
+                        <Accordion title="Trim Level" isOpen={sectionsOpen.trim} onToggle={() => toggleSection('trim')}>
+                            {model.trims.map(t => (
+                                <OptionCard 
+                                    key={t.id} 
+                                    label={t.name} 
+                                    price={t.price - trim.price} 
+                                    active={trim.id === t.id} 
+                                    onClick={() => {}} // In a real app, this would switch trims
+                                    description={t.id === trim.id ? 'Currently selected base configuration.' : undefined}
+                                />
+                            ))}
+                        </Accordion>
 
-                    <div className="flex-1 overflow-y-auto overflow-x-hidden">
-                        {/* Section: Exterior */}
-                        <div className="p-4 border-b border-slate-100">
-                             <div className="flex items-center gap-3 mb-3">
-                                <Palette size={18} className="text-slate-400 shrink-0" />
-                                {leftOpen && <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Exterior Color</h3>}
-                             </div>
-                             {leftOpen && (
-                                 <div className="grid grid-cols-4 gap-2">
-                                     {EXTERIOR_COLORS.map(c => (
-                                         <button 
-                                            key={c.id} 
-                                            onClick={() => setExtColor(c)}
-                                            className={`w-10 h-10 rounded-full border-2 shadow-sm transition-all ${extColor.id === c.id ? 'border-slate-800 scale-110' : 'border-slate-200 hover:scale-105'}`}
-                                            style={{ backgroundColor: c.value }}
-                                            title={c.name}
-                                         />
-                                     ))}
-                                 </div>
-                             )}
-                             {leftOpen && <p className="text-xs text-slate-500 mt-2 font-medium">{extColor.name} {extColor.price > 0 && `(+$${extColor.price})`}</p>}
-                        </div>
-
-                        {/* Section: Wheels */}
-                        <div className="p-4 border-b border-slate-100">
-                             <div className="flex items-center gap-3 mb-3">
-                                <Circle size={18} className="text-slate-400 shrink-0" />
-                                {leftOpen && <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Wheels</h3>}
-                             </div>
-                             {leftOpen && (
-                                 <div className="space-y-2">
-                                     {WHEELS.map(w => (
-                                         <button 
-                                            key={w.id}
-                                            onClick={() => setWheel(w)}
-                                            className={`w-full text-left p-2 rounded-[6px] border text-xs transition-all ${
-                                                wheel.id === w.id 
-                                                ? 'bg-slate-900 text-white border-slate-900' 
-                                                : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300'
-                                            }`}
-                                         >
-                                             <div className="flex justify-between">
-                                                <span className="font-bold">{w.name}</span>
-                                                <span>{w.price === 0 ? 'Std' : `+$${w.price}`}</span>
-                                             </div>
-                                         </button>
-                                     ))}
-                                 </div>
-                             )}
-                        </div>
-
-                         {/* Section: Interior */}
-                         <div className="p-4 border-b border-slate-100">
-                             <div className="flex items-center gap-3 mb-3">
-                                <Layers size={18} className="text-slate-400 shrink-0" />
-                                {leftOpen && <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Interior</h3>}
-                             </div>
-                             {leftOpen && (
-                                 <div className="grid grid-cols-3 gap-2">
-                                     {INTERIOR_COLORS.map(c => (
-                                         <button 
-                                            key={c.id} 
-                                            onClick={() => setIntColor(c)}
-                                            className={`h-10 rounded-[6px] border-2 shadow-sm transition-all relative overflow-hidden ${intColor.id === c.id ? 'border-slate-800 ring-1 ring-slate-800' : 'border-slate-200'}`}
-                                            style={{ backgroundColor: c.value }}
-                                            title={c.name}
-                                         >
-                                             {intColor.id === c.id && <div className="absolute inset-0 flex items-center justify-center bg-black/10"><Check size={16} className="text-white drop-shadow-md" /></div>}
-                                         </button>
-                                     ))}
-                                 </div>
-                             )}
-                             {leftOpen && <p className="text-xs text-slate-500 mt-2 font-medium">{intColor.name} {intColor.price > 0 && `(+$${intColor.price})`}</p>}
-                        </div>
-
-                        {/* Section: Packages */}
-                        <div className="p-4 border-b border-slate-100">
-                             <div className="flex items-center gap-3 mb-3">
-                                <Package size={18} className="text-slate-400 shrink-0" />
-                                {leftOpen && <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Packages</h3>}
-                             </div>
-                             {leftOpen && (
-                                 <div className="space-y-3">
-                                     {PACKAGES.map(p => {
-                                         const active = selectedPackages.includes(p.id);
-                                         return (
-                                            <div 
-                                                key={p.id}
-                                                onClick={() => togglePackage(p.id)}
-                                                className={`p-3 rounded-[6px] border cursor-pointer transition-all ${
-                                                    active ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-slate-200 hover:border-slate-300'
-                                                }`}
-                                            >
-                                                <div className="flex justify-between items-center mb-1">
-                                                    <span className={`text-xs font-bold ${active ? 'text-indigo-900' : 'text-slate-800'}`}>{p.name}</span>
-                                                    <span className={`text-[10px] font-bold ${active ? 'text-indigo-700' : 'text-slate-500'}`}>+${p.price}</span>
-                                                </div>
-                                                <p className="text-[10px] text-slate-500 leading-snug">{p.description}</p>
-                                            </div>
-                                         );
-                                     })}
-                                 </div>
-                             )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* 2.2 CENTER VEHICLE DISPLAY */}
-                <div className="flex-1 bg-slate-100 relative flex flex-col">
-                    {/* Main Visual */}
-                    <div className="flex-1 relative flex items-center justify-center p-8">
-                        {/* 3D Fallback */}
-                        <div className="relative w-full max-w-4xl aspect-video rounded-xl shadow-2xl overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center">
-                            <span className="text-9xl font-black text-slate-400/20 uppercase tracking-tighter select-none">{model.brand}</span>
-                            <div className="absolute inset-0 flex items-center justify-center">
-                                {/* Simulated Vehicle Image Layer */}
-                                <div className="text-center">
-                                    <p className="text-slate-500 font-bold mb-2">Interactive 3D View</p>
-                                    <p className="text-xs text-slate-400">Drag to rotate • Scroll to zoom</p>
-                                </div>
-                            </div>
-                            {/* Color Overlay Simulation */}
-                            <div className="absolute inset-0 mix-blend-overlay pointer-events-none opacity-20" style={{ backgroundColor: extColor.value }}></div>
-                            
-                            {/* Angle Selector */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur rounded-full px-2 py-1 shadow-lg flex gap-1">
-                                {(['Front', 'Side', 'Rear', 'Interior'] as const).map(a => (
-                                    <button
-                                        key={a}
-                                        onClick={() => setAngle(a)}
-                                        className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all ${
-                                            angle === a ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-900'
-                                        }`}
-                                    >
-                                        {a}
-                                    </button>
+                        {/* Exterior Section */}
+                        <Accordion title="Exterior Color" isOpen={sectionsOpen.exterior} onToggle={() => toggleSection('exterior')}>
+                            <div className="grid grid-cols-1 gap-2">
+                                {EXTERIOR_COLORS.map(c => (
+                                    <OptionCard 
+                                        key={c.id} 
+                                        label={c.name} 
+                                        price={c.price} 
+                                        active={extColor.id === c.id} 
+                                        onClick={() => setExtColor(c)} 
+                                        colorValue={c.value}
+                                    />
                                 ))}
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </Accordion>
 
-                {/* 2.4 RIGHT SUMMARY PANEL */}
-                <div className="w-[320px] bg-white border-l border-slate-200 flex flex-col z-20 shadow-xl relative">
-                    
-                    {/* Header */}
-                    <div className="p-5 border-b border-slate-100">
-                        <h2 className="text-lg font-bold text-slate-900">Summary</h2>
-                        <div className="flex items-center gap-2 mt-1">
-                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-[10px] font-bold uppercase">{model.stockStatus}</span>
-                            <span className="text-xs text-slate-400">Stock #K2922</span>
-                        </div>
-                    </div>
+                        {/* Interior Section */}
+                        <Accordion title="Interior" isOpen={sectionsOpen.interior} onToggle={() => toggleSection('interior')}>
+                            <div className="grid grid-cols-1 gap-2">
+                                {INTERIOR_COLORS.map(c => (
+                                    <OptionCard 
+                                        key={c.id} 
+                                        label={c.name} 
+                                        price={c.price} 
+                                        active={intColor.id === c.id} 
+                                        onClick={() => setIntColor(c)} 
+                                        colorValue={c.value}
+                                    />
+                                ))}
+                            </div>
+                        </Accordion>
 
-                    <div className="flex-1 overflow-y-auto p-5">
-                        {/* Price Breakdown */}
-                        <div className="space-y-3 mb-6">
-                            <div className="flex justify-between text-xs text-slate-600">
-                                <span>Base Price ({trim.name})</span>
-                                <span>${trim.price.toLocaleString()}</span>
-                            </div>
-                             <div className="flex justify-between text-xs text-slate-600">
-                                <span>Options Total</span>
-                                <span>${optionsTotal.toLocaleString()}</span>
-                            </div>
-                             <div className="flex justify-between text-xs text-slate-600">
-                                <span>Destination Fee</span>
-                                <span>$1,650</span>
-                            </div>
-                            <div className="flex justify-between text-xs text-slate-500 pt-2 border-t border-slate-100">
-                                <span>Est. Taxes (8.25%)</span>
-                                <span>${Math.round(estimatedTax).toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between items-baseline pt-2 border-t border-slate-200">
-                                <span className="text-sm font-bold text-slate-900">Total Price</span>
-                                <span className="text-2xl font-bold text-slate-900">${Math.round(grandTotal).toLocaleString()}</span>
-                            </div>
-                        </div>
-
-                        {/* Payment Estimator */}
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-6">
-                            <div className="flex bg-slate-200 p-0.5 rounded-lg mb-4">
-                                <button 
-                                    onClick={() => setPaymentMode('Loan')}
-                                    className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${paymentMode === 'Loan' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
-                                >
-                                    Loan
-                                </button>
-                                <button 
-                                    onClick={() => setPaymentMode('Lease')}
-                                    className={`flex-1 py-1 text-[10px] font-bold rounded-md transition-all ${paymentMode === 'Lease' ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}
-                                >
-                                    Lease
-                                </button>
-                            </div>
-                            
-                            <div className="mb-4">
-                                <div className="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
-                                    <span>Down Payment</span>
-                                    <span>${downPayment.toLocaleString()}</span>
-                                </div>
-                                <input type="range" min="0" max="50000" step="1000" defaultValue={downPayment} className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-slate-900" />
-                            </div>
-
-                            <div className="text-center">
-                                <p className="text-[10px] text-slate-500 font-bold uppercase">Est. Monthly</p>
-                                <p className="text-3xl font-black text-slate-900">${monthlyPayment.toLocaleString()}<span className="text-sm font-medium text-slate-400">/mo</span></p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* CTAs */}
-                    <div className="p-5 border-t border-slate-200 bg-white space-y-3">
-                         <button className="w-full py-3 bg-[#424651] hover:bg-slate-800 text-white rounded-[8px] text-sm font-bold shadow-md transition-all active:scale-95">
-                             Generate Quote
-                         </button>
-                         <div className="flex gap-3">
-                            <button className="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-[8px] text-xs font-bold transition-all">
-                                Save Build
-                            </button>
-                             <button className="flex-1 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-[8px] text-xs font-bold transition-all">
-                                Send to Customer
-                            </button>
-                         </div>
-                    </div>
-                </div>
-
-                {/* 2.5 AI INSIGHTS PANEL (Overlay) */}
-                <div className={`absolute top-4 right-[336px] w-[280px] transition-all duration-500 ease-out z-30 ${aiOpen ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0 pointer-events-none'}`}>
-                    <div className="bg-[#424651] rounded-xl shadow-2xl p-5 border border-slate-600">
-                        <div className="flex items-center gap-2 mb-4">
-                            <Sparkles size={16} className="text-[#B4E975]" />
-                            <h3 className="text-xs font-bold text-white uppercase tracking-wider">AI Deal Insights</h3>
-                        </div>
-                        
-                        <div className="space-y-4">
-                            <div>
-                                <div className="flex justify-between text-[10px] font-bold text-slate-400 mb-1">
-                                    <span>Engagement Score</span>
-                                    <span className="text-[#B4E975]">82/100</span>
-                                </div>
-                                <div className="h-1.5 bg-slate-600 rounded-full overflow-hidden">
-                                    <div className="h-full bg-[#B4E975] w-[82%]"></div>
-                                </div>
-                            </div>
-                            
-                            <div className="bg-slate-700/50 p-3 rounded-lg border border-slate-600">
-                                <div className="flex gap-2 items-start">
-                                    <AlertTriangle size={14} className="text-orange-400 shrink-0 mt-0.5" />
-                                    <div>
-                                        <p className="text-xs font-bold text-white mb-1">Upsell Opportunity</p>
-                                        <p className="text-[10px] text-slate-300 leading-snug">
-                                            Adding the <span className="text-white font-bold">Sport Package</span> increases close probability by <span className="text-emerald-400 font-bold">+12%</span> for this demographic.
-                                        </p>
+                        {/* Options Section */}
+                        <Accordion title="Options & Packages" isOpen={sectionsOpen.options} onToggle={() => toggleSection('options')}>
+                            {Object.entries(OPTIONS_CATEGORIES).map(([cat, items]) => (
+                                <div key={cat} className="mb-4 last:mb-0">
+                                    <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 pl-1">{cat}</h4>
+                                    <div className="space-y-2">
+                                        {items.map(opt => (
+                                            <OptionCard 
+                                                key={opt.id}
+                                                label={opt.name}
+                                                price={opt.price}
+                                                active={selectedOpts.includes(opt.id)}
+                                                onClick={() => toggleOption(opt.id)}
+                                                description={opt.description}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
-                                <button className="w-full mt-2 py-1.5 bg-[#B4E975] hover:bg-[#a0d766] text-[#424651] text-[10px] font-bold rounded-[4px]">
-                                    Add Sport Package (+$3,200)
-                                </button>
+                            ))}
+                        </Accordion>
+
+                    </div>
+
+                    {/* 6. PRICE SUMMARY (Fixed Bottom) */}
+                    <div className="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-slate-200 p-6 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                        <div className="space-y-1 mb-4">
+                            <div className="flex justify-between text-xs text-slate-500 font-medium">
+                                <span>Base Price</span>
+                                <span>${trim.price.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between text-xs text-slate-500 font-medium">
+                                <span>Options</span>
+                                <span>${optionsCost.toLocaleString()}</span>
+                            </div>
+                            <div className="flex justify-between items-end pt-2 mt-2 border-t border-slate-100">
+                                <span className="text-sm font-bold text-slate-900">Total Price</span>
+                                <span className="text-2xl font-bold text-indigo-600 leading-none">${total.toLocaleString()}</span>
                             </div>
                         </div>
+                        <button className="w-full py-3.5 bg-[#424651] text-white text-sm font-bold uppercase tracking-wide rounded-[6px] hover:bg-slate-800 transition-all active:scale-[0.98] shadow-md">
+                            Create Quotation
+                        </button>
                     </div>
                 </div>
 
-                 {/* 2.5 AI Toggle Button */}
-                 <button 
-                    onClick={() => setAiOpen(!aiOpen)}
-                    className={`absolute top-4 right-[336px] w-8 h-8 rounded-l-md flex items-center justify-center shadow-md transition-all z-20 ${
-                        aiOpen ? 'bg-[#424651] text-[#B4E975]' : 'bg-white text-slate-400 hover:text-indigo-600'
-                    }`}
-                    style={{ transform: aiOpen ? 'translateX(280px)' : 'translateX(0)' }}
-                >
-                    <Sparkles size={16} />
-                </button>
+                {/* RIGHT: 3D VIEW AREA (Full Bleed) */}
+                <div className="flex-1 bg-gradient-to-br from-slate-200 to-slate-300 relative overflow-hidden">
+                    
+                    {/* Simulated 3D Model Image */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="relative w-full h-full">
+                            {/* In a real app, this would be a Canvas/WebGL container */}
+                            {model.imageUrl ? (
+                                <img 
+                                    src={model.imageUrl} 
+                                    alt="Vehicle 3D View" 
+                                    className={`w-full h-full object-cover transition-opacity duration-500 ${view === 'Interior' ? 'scale-110' : 'scale-100'}`}
+                                />
+                            ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-400">
+                                    <span className="text-9xl font-black opacity-20 uppercase tracking-tighter">{model.brand}</span>
+                                </div>
+                            )}
+                            {/* Color Overlay Mix */}
+                            <div 
+                                className="absolute inset-0 mix-blend-overlay opacity-30 pointer-events-none transition-colors duration-500" 
+                                style={{ backgroundColor: extColor.value }} 
+                            />
+                        </div>
+                    </div>
 
+                    {/* (C) KSP TOGGLE */}
+                    <button 
+                        onClick={() => setKspActive(!kspActive)}
+                        className={`absolute top-6 right-6 px-4 py-2 rounded-full backdrop-blur-md shadow-lg border transition-all z-40 flex items-center gap-2 ${
+                            kspActive ? 'bg-white/90 border-indigo-200 text-indigo-700' : 'bg-white/40 border-white/20 text-slate-600 hover:bg-white/60'
+                        }`}
+                    >
+                        <Info size={16} />
+                        <span className="text-xs font-bold">Highlights {kspActive ? 'On' : 'Off'}</span>
+                    </button>
+
+                    {/* KSP POINTS (Overlay) */}
+                    {kspActive && KSP_POINTS.map(p => (
+                        <div 
+                            key={p.id} 
+                            className="absolute z-30 group" 
+                            style={{ left: p.x + '%', top: p.y + '%' }}
+                        >
+                            <button 
+                                onClick={() => setActiveKsp(activeKsp === p.id ? null : p.id)}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 ${
+                                    activeKsp === p.id ? 'bg-indigo-600 text-white' : 'bg-white/80 backdrop-blur text-indigo-600 animate-pulse'
+                                }`}
+                            >
+                                <Sparkles size={16} />
+                            </button>
+                            {/* Tooltip Card */}
+                            {activeKsp === p.id && (
+                                <div className="absolute left-10 top-0 w-48 bg-white/95 backdrop-blur-md p-3 rounded-lg shadow-xl border border-white/50 animate-in fade-in slide-in-from-left-2 duration-200">
+                                    <h5 className="text-sm font-bold text-slate-900 mb-1">{p.title}</h5>
+                                    <p className="text-[10px] text-slate-500 leading-snug">{p.desc}</p>
+                                    <button onClick={() => setActiveKsp(null)} className="absolute top-1 right-1 text-slate-400 hover:text-slate-600"><X size={12}/></button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+
+                    {/* (A) BOTTOM VIEW NAVIGATION */}
+                    <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40">
+                        <div className="flex items-center gap-1 p-1 bg-white/70 backdrop-blur-[12px] rounded-full shadow-2xl border border-white/40">
+                            {['Front', 'Side', 'Rear', 'Interior'].map((v) => (
+                                <button
+                                    key={v}
+                                    onClick={() => setView(v as any)}
+                                    className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all ${
+                                        view === v 
+                                        ? 'bg-slate-900 text-white shadow-md' 
+                                        : 'text-slate-600 hover:bg-white/50'
+                                    }`}
+                                >
+                                    {v}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* (B) RADIAL MENU (Bottom Right) */}
+                    <div className="absolute bottom-8 right-8 z-40">
+                        {/* Radial Items Arc */}
+                        <div className={`absolute bottom-0 right-0 w-48 h-48 pointer-events-none transition-all duration-300 ${radialOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+                            {RADIAL_ITEMS.map((item, index) => {
+                                // Calculate position on a 90 degree arc
+                                const angle = -90 * (index / (RADIAL_ITEMS.length - 1)); // 0 to -90 deg
+                                const radius = 100; // px
+                                const rad = angle * (Math.PI / 180);
+                                const x = Math.cos(rad) * radius - 24; // Offset for button size
+                                const y = Math.sin(rad) * radius - 24;
+                                
+                                return (
+                                    <button
+                                        key={item.id}
+                                        className="absolute w-10 h-10 rounded-full bg-white/90 backdrop-blur shadow-lg flex items-center justify-center text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 hover:scale-110 transition-all pointer-events-auto group"
+                                        style={{ 
+                                            bottom: 16, right: 16, // Anchor center of trigger
+                                            transform: `translate(${x}px, ${y}px)` 
+                                        }}
+                                        title={item.label}
+                                    >
+                                        <item.icon size={18} />
+                                        {/* Tooltip Label */}
+                                        <span className="absolute -top-8 bg-slate-800 text-white text-[10px] font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                                            {item.label}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+
+                        {/* Trigger Button */}
+                        <button
+                            onClick={() => setRadialOpen(!radialOpen)}
+                            className={`relative w-12 h-12 rounded-full shadow-2xl flex items-center justify-center backdrop-blur-[12px] transition-all duration-300 z-50 ${
+                                radialOpen 
+                                ? 'bg-indigo-600 text-white rotate-45' 
+                                : 'bg-white/80 text-slate-800 hover:scale-105'
+                            }`}
+                        >
+                            <PlusIcon size={24} />
+                        </button>
+                    </div>
+
+                </div>
             </div>
-
-            {/* 2.6 Floating Actions */}
-            <div className="absolute bottom-6 right-6 z-40 flex flex-col gap-3">
-                 <button className="w-12 h-12 bg-white border border-slate-200 rounded-full shadow-fab hover:scale-105 active:scale-95 flex items-center justify-center text-slate-700 transition-all">
-                    <Sliders size={20} />
-                </button>
-                 <button className="w-14 h-14 bg-[#424651] text-white rounded-full shadow-fab hover:scale-105 active:scale-95 flex items-center justify-center transition-all">
-                    <Info size={24} />
-                </button>
-            </div>
-
         </div>
     );
 };
+
+// --- ADDITIONAL ICONS ---
+function PlusIcon(props: any) { return <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>; }

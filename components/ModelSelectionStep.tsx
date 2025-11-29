@@ -12,11 +12,11 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i4 eDrive35",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35-1.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i4%20eDrive35.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i4%20eDrive35-1.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35-1.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i4%20eDrive35.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i4%20eDrive35-1.png"
         ]
       },
       "trims": [
@@ -28,13 +28,13 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i7 eDrive50",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-01.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-01.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-02.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-03.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-04.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-01.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-02.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-03.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i7%20eDrive50-04.png"
         ]
       },
       "trims": [
@@ -46,10 +46,10 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i5 G60",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5-G60.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5-G60.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i5-G60.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i5-G60.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5-G60.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/BMW%20i5-G60.png"
         ]
       },
       "trims": [
@@ -61,8 +61,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne GT",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_gt.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_gt.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Cayenne_gt.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Cayenne_gt.png",
         "angles": []
       },
       "trims": [
@@ -74,8 +74,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne S",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_s.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_s.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Cayenne_s.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Cayenne_s.png",
         "angles": []
       },
       "trims": [
@@ -87,12 +87,12 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne Turbo",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Porsche%20Cayenne%20Turbo-01.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Porsche%20Cayenne%20Turbo-01.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-02.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-03.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Porsche%20Cayenne%20Turbo-01.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Porsche%20Cayenne%20Turbo-02.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Porsche%20Cayenne%20Turbo-03.png"
         ]
       },
       "trims": [
@@ -104,8 +104,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Panamera Base",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_base.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_base.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_base.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_base.png",
         "angles": []
       },
       "trims": [
@@ -117,8 +117,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Panamera 4S",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_4s.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_4s.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_4s.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_4s.png",
         "angles": []
       },
       "trims": [
@@ -130,8 +130,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Panamera GTS",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_gts.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_gts.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_gts.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_gts.png",
         "angles": []
       },
       "trims": [
@@ -143,8 +143,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Panamera Turbo S",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_turbo%20s.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_turbo%20s.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_turbo%20s.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/img/Panamera_turbo%20s.png",
         "angles": []
       },
       "trims": [

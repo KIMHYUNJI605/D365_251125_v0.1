@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { VehicleModel, Trim } from '../types';
 import { Badge } from './ui/Badge';

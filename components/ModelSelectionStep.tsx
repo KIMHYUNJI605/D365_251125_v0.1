@@ -161,14 +161,14 @@ const MODELS: VehicleModel[] = RAW_DATA.models.map(m => ({
     name: m.name,
     basePrice: m.trims[0].price,
     images: m.images,
-    imageUrl: m.images.thumbnail, // Fallback for legacy components
+    imageUrl: m.images.thumbnail, 
     trims: m.trims.map(t => ({
         id: t.trimId,
         name: t.name,
         price: t.price
     })),
-    stockStatus: 'In Stock', // Mocked as dataset doesn't have it
-    specs: { hp: 0, mpg: 'N/A', zeroSixty: 'N/A' } // Mocked
+    stockStatus: 'In Stock', 
+    specs: { hp: 0, mpg: 'N/A', zeroSixty: 'N/A' } 
 }));
 
 interface Props {
@@ -196,8 +196,7 @@ export const ModelSelectionStep: React.FC<Props> = ({ onSelect }) => {
     );
 
     const formatPrice = (price: number) => {
-        // Simple currency formatter
-        return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'KRW' }).format(price).replace('KRW', '₩');
+        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
     };
 
     return (
@@ -279,15 +278,17 @@ export const ModelSelectionStep: React.FC<Props> = ({ onSelect }) => {
 
                                 {/* Image Area */}
                                 <div className="h-48 relative bg-slate-950 flex items-center justify-center overflow-hidden">
-                                    {model.images?.thumbnail ? (
-                                        <img 
-                                            src={model.images.thumbnail} 
-                                            alt={model.name} 
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                                        />
-                                    ) : (
-                                        <span className="text-slate-700 font-bold text-4xl select-none">{model.brand}</span>
-                                    )}
+                                    <img 
+                                        src={model.images?.thumbnail} 
+                                        alt={model.name} 
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                                        onError={(e) => {
+                                            (e.target as HTMLImageElement).style.display = 'none';
+                                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
+                                        }}
+                                    />
+                                    <span className="hidden text-slate-700 font-bold text-4xl select-none absolute">{model.brand}</span>
+                                    
                                     {/* Gradient Overlay */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-80"></div>
                                 </div>
@@ -300,14 +301,14 @@ export const ModelSelectionStep: React.FC<Props> = ({ onSelect }) => {
                                         </div>
                                         <h2 className="text-xl font-bold text-white mb-4 leading-tight shadow-black drop-shadow-md">{model.name}</h2>
                                         
-                                        {/* Trims List */}
+                                        {/* Trims List (Sub-cards) */}
                                         <div className="space-y-2">
                                             <label className="text-[10px] font-bold text-slate-500 uppercase block mb-2">Available Trims</label>
                                             {model.trims.map(trim => (
                                                 <button
                                                     key={trim.id}
                                                     onClick={() => onSelect(model, trim)}
-                                                    className="w-full flex items-center justify-between p-3 rounded-[8px] bg-slate-800 border border-slate-700 hover:border-[#3FE0C5] hover:bg-slate-800/80 transition-all group/trim text-left"
+                                                    className="w-full flex items-center justify-between p-3 rounded-[8px] bg-slate-800 border border-slate-700 hover:border-[#3FE0C5] hover:bg-slate-800/80 hover:shadow-[0_0_15px_rgba(63,224,197,0.1)] transition-all group/trim text-left"
                                                 >
                                                     <span className="text-sm font-bold text-slate-300 group-hover/trim:text-white transition-colors">{trim.name}</span>
                                                     <div className="flex items-center gap-2">

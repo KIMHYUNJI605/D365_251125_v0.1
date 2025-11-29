@@ -75,8 +75,8 @@ function ArrowUpIcon(props: any) { return <svg {...props} viewBox="0 0 24 24" fi
 
 const Accordion: React.FC<{ title: string; isOpen: boolean; onToggle: () => void; children: React.ReactNode }> = ({ title, isOpen, onToggle, children }) => (
     <div className="border-b border-slate-800 last:border-0">
-        <button onClick={onToggle} className="w-full py-4 flex items-center justify-between text-slate-300 hover:text-white transition-colors">
-            <span className="text-xs font-bold uppercase tracking-wider">{title}</span>
+        <button onClick={onToggle} className="w-full py-4 flex items-center justify-between text-slate-300 hover:text-white transition-colors group">
+            <span className="text-xs font-bold uppercase tracking-wider group-hover:text-[#3FE0C5] transition-colors">{title}</span>
             {isOpen ? <ChevronUp size={16} strokeWidth={1.75} /> : <ChevronDown size={16} strokeWidth={1.75} />}
         </button>
         <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${isOpen ? 'max-h-[800px]' : 'max-h-0'}`}>
@@ -180,27 +180,36 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
     return (
         <div className="flex flex-col h-full bg-slate-950 overflow-hidden font-sans text-slate-200">
             
-            {/* 1. HEADER - Dark */}
-            <div className="h-[68px] bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-30 relative shadow-md">
-                <div className="flex flex-col">
-                    <h1 className="text-lg font-bold text-white leading-tight">{model.brand} {model.name}</h1>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{trim.name} Trim</span>
+            {/* 1. HEADER - Premium Dark & Minimal */}
+            <header className="h-[72px] bg-slate-950 border-b border-white/5 flex items-center justify-between px-6 lg:px-8 shrink-0 z-50 relative">
+                {/* Left: Identity */}
+                <div className="flex flex-col justify-center">
+                    <h1 className="text-lg md:text-xl font-bold text-white tracking-tight leading-none group cursor-default">
+                        {model.brand} <span className="font-light text-slate-400 group-hover:text-white transition-colors">{model.name}</span>
+                    </h1>
+                    <div className="flex items-center gap-2 mt-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#3FE0C5] shadow-[0_0_8px_#3FE0C5] animate-pulse"></span>
+                        <span className="text-[10px] font-bold text-[#3FE0C5] uppercase tracking-[0.15em]">{trim.name}</span>
+                    </div>
                 </div>
-                <div className="flex items-center gap-3">
-                    {/* Secondary Button */}
+
+                {/* Right: Actions */}
+                <div className="flex items-center gap-4">
                     <button 
                         onClick={onBack}
-                        className="px-4 py-2 text-xs font-bold text-slate-300 bg-slate-800 hover:bg-slate-700 hover:text-white rounded-[6px] transition-all border border-slate-700"
+                        className="hidden md:flex items-center justify-center h-9 px-5 rounded-full border border-white/10 bg-white/5 text-xs font-bold text-slate-300 hover:bg-white/10 hover:text-white hover:border-white/20 transition-all active:scale-95"
                     >
                         Change Model
                     </button>
-                    {/* Tertiary Button */}
-                    <button className="px-4 py-2 text-xs font-bold text-slate-400 hover:text-[#3FE0C5] bg-transparent hover:bg-slate-800/50 rounded-[6px] transition-colors flex items-center gap-2">
-                        <LogOut size={14} />
-                        Switch to CRM
+                    
+                    <div className="h-6 w-px bg-white/10 hidden md:block"></div>
+                    
+                    <button className="flex items-center gap-2 h-9 px-4 rounded-full text-xs font-bold text-slate-400 hover:text-[#3FE0C5] hover:bg-[#3FE0C5]/10 transition-all">
+                        <LogOut size={16} strokeWidth={2} />
+                        <span className="hidden sm:inline">CRM</span>
                     </button>
                 </div>
-            </div>
+            </header>
 
             {/* 3. LAYOUT STRUCTURE (Hard Split, Right Panel) */}
             <div className="flex flex-1 overflow-hidden relative flex-row">
@@ -253,8 +262,8 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
                         >
                             <button 
                                 onClick={() => setActiveKsp(activeKsp === p.id ? null : p.id)}
-                                className={`w-8 h-8 rounded-full flex items-center justify-center shadow-xl transition-all hover:scale-110 relative ${
-                                    activeKsp === p.id ? 'bg-[#3FE0C5] text-slate-900' : 'bg-slate-900/80 backdrop-blur text-[#3FE0C5] border border-[#3FE0C5]/30'
+                                className={`w-8 h-8 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(63,224,197,0.3)] transition-all hover:scale-110 relative ${
+                                    activeKsp === p.id ? 'bg-[#3FE0C5] text-slate-900' : 'bg-slate-900/80 backdrop-blur text-[#3FE0C5] border border-[#3FE0C5]/50'
                                 }`}
                             >
                                 <span className={`absolute inset-0 rounded-full bg-[#3FE0C5] opacity-20 animate-ping ${activeKsp === p.id ? 'hidden' : 'block'}`}></span>
@@ -280,7 +289,7 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
                                     onClick={() => setView(v.id as any)}
                                     className={`h-full px-5 rounded-full text-xs font-bold transition-all flex items-center gap-2 ${
                                         view === v.id 
-                                        ? 'bg-[#3FE0C5] text-slate-900 shadow-lg shadow-[#3FE0C5]/20' 
+                                        ? 'bg-[#3FE0C5] text-slate-900 shadow-[0_0_15px_rgba(63,224,197,0.2)]' 
                                         : 'text-slate-400 hover:bg-white/5 hover:text-white'
                                     }`}
                                 >
@@ -291,7 +300,7 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
                         </div>
                     </div>
 
-                    {/* (B) RADIAL MENU (Bottom Left now, since panel is on right) */}
+                    {/* (B) RADIAL MENU (Bottom Left) */}
                     <div className="absolute bottom-8 left-8 z-40">
                         {/* Radial Items Arc */}
                         <div className={`absolute bottom-0 left-0 w-48 h-48 pointer-events-none transition-all duration-300 ${radialOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
@@ -300,19 +309,9 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
                                 const angle = 0 + 90 * (index / (RADIAL_ITEMS.length - 1)); // 0 to 90 deg
                                 const radius = 100; // px
                                 const rad = angle * (Math.PI / 180);
-                                const x = Math.cos(rad) * radius - 24; 
-                                const y = -Math.sin(rad) * radius - 24; // Negative Y to go up
+                                // const x = Math.cos(rad) * radius - 24; 
+                                // const y = -Math.sin(rad) * radius - 24; // Negative Y to go up
                                 
-                                // Adjust X because cos(0) is 1 (right), we want to go right and up from bottom-left corner? 
-                                // Actually bottom-left corner means 0 degrees is right, 90 degrees is up.
-                                // Standard unit circle: 0 is East, 90 is North. 
-                                // We are at bottom-left. We want arc from East (0) to North (90).
-                                const cx = 24; // Center offset of trigger
-                                const cy = -24; // Center offset of trigger (relative to bottom)
-
-                                const finalX = cx + (Math.cos(rad) * radius);
-                                const finalY = cy - (Math.sin(rad) * radius);
-
                                 return (
                                     <button
                                         key={item.id}
@@ -435,7 +434,7 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack }) => {
                                 <span className="text-2xl font-bold text-[#3FE0C5] leading-none">${total.toLocaleString()}</span>
                             </div>
                         </div>
-                        <button className="w-full py-3.5 bg-[#3FE0C5] text-slate-900 text-sm font-bold uppercase tracking-wide rounded-[6px] hover:bg-[#32b29d] transition-all active:scale-[0.98] shadow-lg shadow-[#3FE0C5]/20">
+                        <button className="w-full py-3.5 bg-[#3FE0C5] text-slate-900 text-sm font-bold uppercase tracking-wide rounded-[6px] hover:bg-[#32b29d] transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(63,224,197,0.15)] hover:shadow-[0_0_25px_rgba(63,224,197,0.3)]">
                             Create Quotation
                         </button>
                     </div>

@@ -2,60 +2,86 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Dealer365 Dashboard</title>
+
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind Config -->
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inter', 'sans-serif'],
+              sans: ["Inter", "sans-serif"],
             },
             colors: {
               primary: {
-                50: '#f8fafc',
-                100: '#f1f5f9',
-                500: '#64748b', // Slate 500
-                600: '#475569', // Slate 600
-                700: '#334155', // Slate 700
-                800: '#1e293b', // Slate 800
-                900: '#0f172a', // Slate 900 (Main Dark)
-                950: '#020617',
+                50: "#f8fafc",
+                100: "#f1f5f9",
+                500: "#64748b",
+                600: "#475569",
+                700: "#334155",
+                800: "#1e293b",
+                900: "#0f172a",
+                950: "#020617",
               },
               secondary: {
-                500: '#94a3b8',
-                900: '#0f172a',
+                500: "#94a3b8",
+                900: "#0f172a",
               },
               inventis: {
-                bg: '#f8fafc',
-                card: '#ffffff',
-                border: '#e2e8f0',
-                red: '#E74C3C',
-                orange: '#F39C12',
-                yellow: '#F1C40F',
-                green: '#2ECC71',
-                blue: '#3498DB',
-                indigo: '#5B2C6F',
-                purple: '#9B59B6',
-              }
+                bg: "#0f172a", /* override to dark for config mode */
+                card: "#ffffff",
+                border: "#e2e8f0",
+                red: "#E74C3C",
+                orange: "#F39C12",
+                yellow: "#F1C40F",
+                green: "#2ECC71",
+                blue: "#3498DB",
+                indigo: "#5B2C6F",
+                purple: "#9B59B6",
+              },
             },
             boxShadow: {
-              'card': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)',
-              'card-hover': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-              'fab': '0 4px 12px rgba(0, 0, 0, 0.15)',
-            }
-          }
-        }
-      }
+              card:
+                "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
+              "card-hover":
+                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+              fab: "0 4px 12px rgba(0, 0, 0, 0.15)",
+            },
+          },
+        },
+      };
     </script>
+
+    <!-- GLOBAL CRITICAL STYLE (Fix full height) -->
     <style>
+      html,
+      body,
+      #root {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
       body {
         overscroll-behavior: none;
-        overflow: hidden; /* Strict no scroll */
+        background: #0f172a;
       }
-      /* Hide scrollbar for internal lists but keep functionality */
+
+      /* Hide scrollbars safely for app layout */
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -63,27 +89,25 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
-      
-      /* Custom Utilities */
-      .text-shadow-sm {
-        text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
-    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
-  }
-}
-</script>
-</head>
-  <body class="bg-inventis-bg text-slate-800 antialiased h-screen w-screen overflow-hidden">
-    <div id="root" class="h-full w-full"></div>
+
+    <!-- IMPORT MAPS (AI Studio) -->
+    <script type="importmap">
+      {
+        "imports": {
+          "react/": "https://aistudiocdn.com/react@^19.2.0/",
+          "react": "https://aistudiocdn.com/react@^19.2.0",
+          "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+          "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
+          "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+          "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+          "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
+        }
+      }
+    </script>
+  </head>
+
+  <body class="h-full w-full overflow-hidden">
+    <div id="root"></div>
   </body>
 </html>

@@ -108,6 +108,11 @@ export interface VehicleModel {
   trims: Trim[];
   stockStatus: 'In Stock' | 'Low Stock' | 'Arriving Soon';
   specs?: VehicleSpecs;
+  
+  // New Filter Props
+  bodyType?: 'Sedan' | 'SUV' | 'Coupe' | 'Sports Car';
+  powertrain?: 'EV' | 'Hybrid' | 'Gasoline';
+  isInventory?: boolean;
 }
 
 export interface ConfigOption {

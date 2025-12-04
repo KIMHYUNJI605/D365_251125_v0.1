@@ -15,14 +15,14 @@ export const generateAIResponse = async (prompt: string): Promise<string> => {
     // Fallback if no API key is present for the UI demo
     return new Promise(resolve => {
         setTimeout(() => {
-            resolve("I'm simulating a response because the API Key is missing. In a real environment, I would summarize your day, suggest 5 actions, or draft a message based on your live CRM data.");
+            resolve("I'm simulating a response because the API Key is missing. I am using gemini-3-pro-preview capabilities (simulated). In a real environment, I would summarize your day, suggest 5 actions, or draft a message based on your live CRM data.");
         }, 1500);
     });
   }
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-pro-preview',
       contents: prompt,
     });
     return response.text || "No response generated.";

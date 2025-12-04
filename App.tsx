@@ -39,7 +39,8 @@ const CURRENT_USER = {
 };
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<ViewState>("landing");
+  // 기본 화면을 Sales Dashboard로 설정 (추후 로그인 후 사용자 권한에 따라 결정)
+  const [currentView, setCurrentView] = useState<ViewState>("dashboard");
   const [selectedKPI, setSelectedKPI] = useState<KPI | null>(null);
   const [kpis, setKpis] = useState<KPI[]>(INITIAL_KPIS);
 

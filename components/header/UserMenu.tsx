@@ -17,13 +17,15 @@ import {
   Shield,
 } from 'lucide-react';
 
+interface UserInfo {
+  name: string;
+  email: string;
+  role: string;
+  avatar?: string;
+}
+
 interface UserMenuProps {
-  user?: {
-    name: string;
-    email: string;
-    role: string;
-    avatar?: string;
-  };
+  user?: UserInfo;
   onLogout?: () => void;
   onSettings?: () => void;
 }

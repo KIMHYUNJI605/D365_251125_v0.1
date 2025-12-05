@@ -20,11 +20,11 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i4 eDrive35",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35-1.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i4%20eDrive35.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i4%20eDrive35-1.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i4%20eDrive35-1.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i4%20eDrive35.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i4%20eDrive35-1.png"
         ]
       },
       "trims": [
@@ -37,10 +37,10 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i5 eDrive40",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20eDrive40.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20eDrive40.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20eDrive40.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20eDrive40.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20eDrive40.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20eDrive40.png"
         ]
       },
       "trims": [
@@ -53,10 +53,10 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i5 M60 xDrive",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20M60%20xDrive.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20M60%20xDrive.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20M60%20xDrive.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20M60%20xDrive.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i5%20M60%20xDrive.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i5%20M60%20xDrive.png"
         ]
       },
       "trims": [
@@ -69,13 +69,13 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW i7 eDrive50",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-01.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-01.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-01.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-02.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-03.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%20i7%20eDrive50-04.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-01.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-02.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-03.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%20i7%20eDrive50-04.png"
         ]
       },
       "trims": [
@@ -88,10 +88,10 @@ const RAW_DATA = {
       "brand": "BMW",
       "name": "BMW 5 Series 530i",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%205%20Series%20530i.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%205%20Series%20530i.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%205%20Series%20530i.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%205%20Series%20530i.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/BMW%205%20Series%20530i.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/BMW%205%20Series%20530i.png"
         ]
       },
       "trims": [
@@ -104,8 +104,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne S",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_s.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne_s.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Cayenne_s.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Cayenne_s.png",
         "angles": []
       },
       "trims": [
@@ -118,12 +118,12 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne Turbo",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Porsche%20Cayenne%20Turbo-01.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Porsche%20Cayenne%20Turbo-01.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-01.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-02.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Porsche%20Cayenne%20Turbo-03.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Porsche%20Cayenne%20Turbo-01.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Porsche%20Cayenne%20Turbo-02.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Porsche%20Cayenne%20Turbo-03.png"
         ]
       },
       "trims": [
@@ -136,8 +136,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Cayenne Turbo GT",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne%20Turbo%20GT.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Cayenne%20Turbo%20GT.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Cayenne%20Turbo%20GT.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Cayenne%20Turbo%20GT.png",
         "angles": []
       },
       "trims": [
@@ -150,8 +150,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche Panamera Base",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_base.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/Panamera_base.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Panamera_base.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/Panamera_base.png",
         "angles": []
       },
       "trims": [
@@ -164,8 +164,8 @@ const RAW_DATA = {
       "brand": "Porsche",
       "name": "Porsche 911 Carrera",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/911%20Carrera.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/911%20Carrera.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/911%20Carrera.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/911%20Carrera.png",
         "angles": []
       },
       "trims": [
@@ -178,8 +178,8 @@ const RAW_DATA = {
       "brand": "Toyota",
       "name": "Toyota Highlander (Blue)",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander.png",
         "angles": []
       },
       "trims": [
@@ -192,8 +192,8 @@ const RAW_DATA = {
       "brand": "Toyota",
       "name": "Toyota Highlander (Gray)",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander02.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander02.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander02.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander02.png",
         "angles": []
       },
       "trims": [
@@ -206,8 +206,8 @@ const RAW_DATA = {
       "brand": "Toyota",
       "name": "Toyota Highlander XSE",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander03.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Highlander03.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander03.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Highlander03.png",
         "angles": []
       },
       "trims": [
@@ -220,8 +220,8 @@ const RAW_DATA = {
       "brand": "Toyota",
       "name": "Toyota Grand Highlander",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Grand%20Highlander.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20Grand%20Highlander.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Grand%20Highlander.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20Grand%20Highlander.png",
         "angles": []
       },
       "trims": [
@@ -234,8 +234,8 @@ const RAW_DATA = {
       "brand": "Toyota",
       "name": "Toyota Crown Signia",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20TOYOTA%20CROWN%20SIGNIA.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20TOYOTA%20CROWN%20SIGNIA.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20TOYOTA%20CROWN%20SIGNIA.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20TOYOTA%20CROWN%20SIGNIA.png",
         "angles": []
       },
       "trims": [
@@ -248,8 +248,8 @@ const RAW_DATA = {
       "brand": "Hyundai",
       "name": "Hyundai 2026 KONA",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20KONA.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20KONA.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20KONA.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20KONA.png",
         "angles": []
       },
       "trims": [
@@ -262,8 +262,8 @@ const RAW_DATA = {
       "brand": "Hyundai",
       "name": "Hyundai 2026 ELANTRA",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20ELANTRA.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20ELANTRA.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20ELANTRA.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20ELANTRA.png",
         "angles": []
       },
       "trims": [
@@ -276,8 +276,8 @@ const RAW_DATA = {
       "brand": "Hyundai",
       "name": "Hyundai 2026 SANTA FE Hybrid",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20SANTA%20FE%20Hybrid.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/2026%20SANTA%20FE%20Hybrid.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20SANTA%20FE%20Hybrid.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/2026%20SANTA%20FE%20Hybrid.png",
         "angles": []
       },
       "trims": [
@@ -290,11 +290,11 @@ const RAW_DATA = {
       "brand": "Hyundai",
       "name": "Hyundai TUCSON Hybrid",
       "images": {
-        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/TUCSON%20Hybrid.png",
-        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/TUCSON%20Hybrid.png",
+        "thumbnail": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/TUCSON%20Hybrid.png",
+        "hero": "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/TUCSON%20Hybrid.png",
         "angles": [
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/TUCSON%20Hybrid02.png",
-          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/TUCSON%20Hybrid003.png"
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/TUCSON%20Hybrid02.png",
+          "https://raw.githubusercontent.com/KIMHYUNJI605/D365_251125_v0.1/main/components/car_image/TUCSON%20Hybrid003.png"
         ]
       },
       "trims": [

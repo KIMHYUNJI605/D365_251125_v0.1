@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, HelpCircle, User, Mic, Camera, ScanText, Sparkles, CheckCircle } from 'lucide-react';
+import { Search, Bell, HelpCircle, User, Mic, Camera, ScanText, Sparkles } from 'lucide-react';
 
 export type AppMode = 'SALES' | 'SERVICE' | 'ADMIN';
 
@@ -8,126 +8,90 @@ interface AppHeaderProps {
   theme?: 'light' | 'dark';
   onSearch?: (query: string) => void;
   onAiAdvisor?: () => void;
-  onCheckIn?: () => void; // New Action
 }
 
 export const AppHeader: React.FC<AppHeaderProps> = ({ 
   mode, 
   theme = 'light',
   onSearch,
-  onAiAdvisor,
-  onCheckIn
+  onAiAdvisor 
 }) => {
   const isDark = theme === 'dark';
   
-  // --- Design Tokens (Standardized) ---
-  // Primary Brand: #00D2BA (Teal)
-  // Dark Background: #111827 (Dark Navy)
-  
-  const colors = {
-    bg: isDark ? 'bg-[#111827] border-gray-800' : 'bg-white border-gray-200',
-    textPrimary: isDark ? 'text-white' : 'text-gray-900',
-    textSecondary: isDark ? 'text-gray-400' : 'text-gray-500',
-    inputBg: isDark 
-      ? 'bg-gray-900 text-white placeholder:text-gray-600 focus:border-[#00D2BA]' 
-      : 'bg-gray-100 text-gray-900 placeholder:text-gray-400 focus:border-[#00D2BA]',
-    logoBg: isDark ? 'bg-[#00D2BA] text-gray-900' : 'bg-[#111827] text-white'
-  };
+  // Color Tokens based on Theme
+  const bgClass = isDark ? 'bg-[#0F172A] border-slate-800' : 'bg-white border-slate-200';
+  const textPrimary = isDark ? 'text-white' : 'text-slate-900';
+  const textSecondary = isDark ? 'text-slate-400' : 'text-slate-500';
+  const borderClass = isDark ? 'border-slate-700' : 'border-slate-200';
+  const inputBg = isDark ? 'bg-slate-900 text-white placeholder:text-slate-600' : 'bg-slate-100 text-slate-900 placeholder:text-slate-400';
 
-  // Mode Badge Logic
-  const getModeLabel = () => {
-    switch(mode) {
-      case 'SALES': return isDark ? 'Showroom Mode' : 'Sales Workspace';
-      case 'SERVICE': return 'Service Center';
-      case 'ADMIN': return 'Admin Console';
-      default: return '';
-    }
+  // Mode Badge Color
+  const getModeColor = () => {
+    if (mode === 'SALES') return isDark ? 'text-[#3FE0C5]' : 'text-blue-600';
+    if (mode === 'SERVICE') return 'text-orange-500';
+    return 'text-purple-500';
   };
 
   return (
-    <header className={`h-16 w-full border-b flex items-center justify-between px-6 shrink-0 z-50 transition-colors duration-300 ${colors.bg}`}>
+    <header className={`h-[64px] w-full border-b flex items-center justify-between px-6 shrink-0 z-50 transition-colors duration-300 ${bgClass}`}>
       
-      {/* LEFT: Identity (Cleaned up - No Grid Icon) */}
-      <div className="flex items-center gap-3 min-w-[240px]">
-        {/* Logo Mark */}
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm shadow-sm shrink-0 ${colors.logoBg}`}>
-          D
-        </div>
-        {/* Brand Name & Mode */}
-        <div className="flex flex-col justify-center">
-          <span className={`text-base font-bold leading-none tracking-tight ${colors.textPrimary}`}>
-            Dealer365
-          </span>
-          <span className="text-[10px] font-bold uppercase tracking-wider mt-0.5 text-[#00D2BA]">
-            {getModeLabel()}
-          </span>
+      {/* LEFT: Identity */}
+      <div className="flex items-center gap-4 min-w-[240px]">
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-sm shadow-sm ${isDark ? 'bg-[#3FE0C5] text-slate-900' : 'bg-slate-900 text-white'}`}>
+            D
+          </div>
+          <div className="flex flex-col justify-center">
+             <span className={`text-base font-bold leading-none ${textPrimary}`}>Dealer365</span>
+             <span className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${getModeColor()}`}>
+               {mode === 'SALES' && (isDark ? 'Showroom' : 'Sales Workspace')}
+               {mode === 'SERVICE' && 'Service Center'}
+               {mode === 'ADMIN' && 'Admin Console'}
+             </span>
+          </div>
         </div>
       </div>
 
-      {/* CENTER: Omni-Search (Retained functional icons) */}
-      <div className="flex-1 max-w-2xl px-8">
+      {/* CENTER: Super Search */}
+      <div className="flex-1 max-w-2xl px-4">
         <div className="relative group">
-          <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${colors.textSecondary}`}>
-            <Search size={18} />
-          </div>
-          <input 
-            type="text"
-            placeholder={mode === 'SERVICE' ? "Search RO, VIN, License Plate..." : "Search Leads, Inventory, Customers..."}
-            className={`w-full h-10 pl-10 pr-24 rounded-full border border-transparent focus:ring-1 focus:ring-[#00D2BA] outline-none text-sm transition-all ${colors.inputBg}`}
-          />
-          {/* Input Action Icons (Voice/OCR/Cam) */}
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-             <button className={`p-1.5 rounded-full hover:bg-gray-500/10 transition-colors ${colors.textSecondary}`} title="Voice Search"><Mic size={14}/></button>
-             <button className={`p-1.5 rounded-full hover:bg-gray-500/10 transition-colors ${colors.textSecondary}`} title="OCR Scan"><ScanText size={14}/></button>
-             <button className={`p-1.5 rounded-full hover:bg-gray-500/10 transition-colors ${colors.textSecondary}`} title="Image Search"><Camera size={14}/></button>
-          </div>
+            <div className={`absolute left-3 top-1/2 -translate-y-1/2 ${textSecondary}`}>
+               <Search size={18} />
+            </div>
+            <input 
+               type="text"
+               placeholder={mode === 'SERVICE' ? "Search RO, VIN, License Plate..." : "Search Leads, Inventory, Customers..."}
+               className={`w-full h-10 pl-10 pr-24 rounded-xl border border-transparent focus:border-[#3FE0C5] focus:ring-1 focus:ring-[#3FE0C5] outline-none text-sm transition-all ${inputBg}`}
+            />
+            {/* Input Action Icons */}
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <button className={`p-1.5 rounded-md hover:bg-slate-500/10 transition-colors ${textSecondary}`} title="Voice Search"><Mic size={16}/></button>
+                <button className={`p-1.5 rounded-md hover:bg-slate-500/10 transition-colors ${textSecondary}`} title="OCR Scan"><ScanText size={16}/></button>
+                <button className={`p-1.5 rounded-md hover:bg-slate-500/10 transition-colors ${textSecondary}`} title="Image Search"><Camera size={16}/></button>
+            </div>
         </div>
       </div>
 
       {/* RIGHT: Global Actions */}
       <div className="flex items-center gap-3 min-w-[240px] justify-end">
-        
-        {/* 1. Primary Action: Check-in (New Standard) */}
-        <button 
-          onClick={onCheckIn}
-          className="bg-[#00D2BA] hover:bg-[#00bfab] text-gray-900 text-xs font-bold px-4 py-2 rounded-full flex items-center gap-2 transition-transform active:scale-95 shadow-[0_0_10px_rgba(0,210,186,0.2)]"
-        >
-          <CheckCircle size={14} strokeWidth={2.5} />
-          <span>Check-in</span>
-        </button>
-
-        {/* 2. AI Advisor */}
         <button 
           onClick={onAiAdvisor}
-          className={`flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all border ${
-            isDark 
-            ? 'border-gray-700 bg-gray-800 text-gray-300 hover:text-white hover:border-[#00D2BA]' 
-            : 'border-gray-200 bg-white text-gray-600 hover:text-[#111827] hover:border-[#111827]'
-          }`}
+          className={`flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all shadow-sm hover:shadow-md active:scale-95 ${isDark ? 'bg-[#3FE0C5] text-slate-900 hover:bg-[#32b29d]' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
         >
-          <Sparkles size={14} className={isDark ? "text-[#00D2BA]" : "text-purple-600"} />
+          <Sparkles size={14} />
           <span>AI Advisor</span>
         </button>
         
-        <div className={`h-5 w-px mx-1 ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+        <div className={`h-6 w-px mx-1 ${isDark ? 'bg-slate-700' : 'bg-slate-200'}`}></div>
 
-        {/* 3. Notifications */}
-        <button className={`p-2 rounded-full hover:bg-gray-500/10 transition-colors relative ${colors.textSecondary}`}>
+        <button className={`p-2 rounded-full hover:bg-slate-500/10 transition-colors relative ${textSecondary}`}>
            <Bell size={20} />
-           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-[#111827]"></span>
+           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
         </button>
-
-        {/* 4. Help */}
-        <button className={`p-2 rounded-full hover:bg-gray-500/10 transition-colors ${colors.textSecondary}`}>
+        <button className={`p-2 rounded-full hover:bg-slate-500/10 transition-colors ${textSecondary}`}>
            <HelpCircle size={20} />
         </button>
-
-        {/* 5. Profile */}
-        <button className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-sm transition-all ml-1 ${
-          isDark 
-          ? 'bg-gray-800 border-gray-700 text-gray-300 hover:border-[#00D2BA]' 
-          : 'bg-white border-gray-200 text-gray-600 hover:border-gray-400'
-        }`}>
+        <button className={`w-9 h-9 rounded-full flex items-center justify-center border shadow-sm hover:ring-2 hover:ring-offset-1 transition-all ml-1 ${isDark ? 'bg-slate-800 border-slate-700 text-slate-300 ring-offset-slate-900' : 'bg-white border-slate-200 text-slate-600'}`}>
            <User size={18} />
         </button>
       </div>

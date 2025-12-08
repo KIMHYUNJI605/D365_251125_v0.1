@@ -523,22 +523,8 @@ export const ConfiguratorStep: React.FC<Props> = ({ model, trim, onBack, onNavig
     return (
         <div className="flex flex-col lg:flex-row h-full bg-slate-950 overflow-hidden text-slate-200 font-sans selection:bg-[#3FE0C5] selection:text-slate-900 relative">
             
-            {/* GLOBAL HEADER + SUBHEADER */}
-            <header className="absolute top-0 left-0 w-full h-[64px] bg-slate-950 border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-[60] shadow-md">
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700"><span className="font-black text-white text-sm">D</span></div>
-                    <div className="flex flex-col"><span className="text-sm font-bold text-white leading-none">Dealer365</span><span className={`text-[10px] font-bold text-[#3FE0C5] uppercase tracking-wider leading-none mt-0.5`}>Configu Mode</span></div>
-                </div>
-                <div className="flex items-center gap-4">
-                    <button className={`flex items-center gap-2 px-3 py-1.5 rounded-full bg-[${NEO_MINT}]/10 border border-[${NEO_MINT}]/50 text-[${NEO_MINT}] text-xs font-bold hover:bg-[${NEO_MINT}]/20 transition-all`} onClick={() => setAiPanelOpen(!aiPanelOpen)}><Sparkles size={14} /> AI Advisor</button>
-                    <div className="h-6 w-px bg-slate-800"></div>
-                    <button className="flex items-center justify-center w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"><UserCheck size={18} /></button>
-                    <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-800">
-                        <button onClick={() => onNavigate('dashboard')} className="px-3 py-1 rounded text-[10px] font-bold text-slate-500 hover:text-slate-300 transition-colors">CRM</button>
-                        <button className="px-3 py-1 rounded bg-slate-800 text-white text-[10px] font-bold shadow-sm">Config</button>
-                    </div>
-                </div>
-            </header>
+            {/* 1. CONFIGU SUB-HEADER (RETAINED) */}
+            {/* Removed duplicated global header, using Sub-header as primary local nav */}
             <div className="absolute top-[64px] left-0 w-full h-[56px] bg-slate-900/90 backdrop-blur-md border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-[50]">
                 <div className="flex items-center gap-4">
                     <button onClick={onBack} className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-slate-700 bg-slate-800/50 text-xs font-bold text-slate-300 hover:bg-slate-700 hover:text-white transition-all"><ArrowLeft size={14} /> Change Model</button>

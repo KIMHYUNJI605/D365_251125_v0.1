@@ -1,45 +1,33 @@
 import React from 'react';
-import { LayoutGrid, FileText, Calendar, Car, UserCheck, BarChart3, Wrench, MessageSquare, Receipt, Settings, Database, Lock, ArrowLeft, Plus, LayoutDashboard } from 'lucide-react';
+import { LayoutGrid, FileText, Calendar, Car, UserCheck, BarChart3, Wrench, MessageSquare, Receipt, Settings, Database, Lock, ArrowLeft, Plus } from 'lucide-react';
 
-export type AppMode = 'SALES' | 'SERVICE' | 'ADMIN';
-export type ViewMode = 'CRM' | 'SHOWROOM';
+type AppMode = 'SALES' | 'SERVICE' | 'ADMIN';
 
 interface ModeNavBarProps {
-  mode: AppMode;            // 현재 대분류 모듈 (SALES, SERVICE...)
-  activeTab: string;        // 현재 선택된 탭 (Dashboard, Deals...)
+  mode: AppMode;
+  activeTab: string;
   onTabChange: (tabId: string) => void;
+  theme?: 'light' | 'dark';
   
-  // View Mode for Sales (CRM vs Showroom)
-  viewMode?: ViewMode;
-  onViewModeChange?: (mode: ViewMode) => void;
-
   // Actions
   onNewDeal?: () => void;
+  onConfigurator?: () => void;
   onNewRO?: () => void;
+  onBackToDashboard?: () => void; // For Config mode
 }
 
 export const ModeNavBar: React.FC<ModeNavBarProps> = ({ 
-  mode, 
-  activeTab, 
-  onTabChange, 
-  viewMode = 'CRM', 
-  onViewModeChange,
-  onNewDeal, 
-  onNewRO
+  mode, activeTab, onTabChange, theme = 'light', 
+  onNewDeal, onConfigurator, onNewRO, onBackToDashboard
 }) => {
-  // Showroom 모드일 때만 다크 테마 적용
-  const isShowroom = mode === 'SALES' && viewMode === 'SHOWROOM';
-  
-  // --- Design Tokens ---
-  // Dark Navy: #111827, Teal: #00D2BA
-  const styles = {
-    nav: isShowroom ? 'bg-[#111827] border-gray-800' : 'bg-white border-gray-200',
-    text: isShowroom ? 'text-gray-400' : 'text-gray-500',
-    activeText: isShowroom ? 'text-white' : 'text-gray-900',
-    activeBg: isShowroom ? 'bg-transparent' : 'bg-transparent', // 배경색 대신 텍스트 강조만
-    activeBorder: isShowroom ? 'border-[#00D2BA]' : 'border-[#111827]',
-    hover: isShowroom ? 'hover:text-white' : 'hover:text-gray-900',
-  };
+  const isDark = theme === 'dark';
+
+  // Theme Styles
+  const bgClass = isDark ? 'bg-[#0F172A]/90 backdrop-blur-md border-slate-800' : 'bg-white border-slate-200';
+  const textClass = isDark ? 'text-slate-300' : 'text-slate-600';
+  const activeTextClass = isDark ? 'text-white' : 'text-slate-900';
+  const activeBgClass = isDark ? 'bg-slate-800' : 'bg-slate-100';
+  const hoverClass = isDark ? 'hover:text-white hover:bg-slate-800/50' : 'hover:text-slate-900 hover:bg-slate-50';
 
   // Tabs Configuration
   const getTabs = () => {
@@ -48,18 +36,21 @@ export const ModeNavBar: React.FC<ModeNavBarProps> = ({
       { id: 'deals', label: 'Deals Pipeline', icon: FileText },
       { id: 'inventory', label: 'Inventory', icon: Car },
       { id: 'calendar', label: 'Calendar', icon: Calendar },
+      { id: 'customers', label: 'Customers', icon: UserCheck },
       { id: 'reports', label: 'Reports', icon: BarChart3 },
     ];
     if (mode === 'SERVICE') return [
       { id: 'workbench', label: 'RO Workbench', icon: Wrench },
-      { id: 'schedule', label: 'Schedule', icon: Calendar },
+      { id: 'jobboard', label: 'Job Board', icon: Calendar },
       { id: 'messages', label: 'Messages', icon: MessageSquare },
       { id: 'billing', label: 'Billing', icon: Receipt },
+      { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     ];
     if (mode === 'ADMIN') return [
-      { id: 'overview', label: 'Overview', icon: LayoutGrid },
-      { id: 'users', label: 'Users & Roles', icon: UserCheck },
+      { id: 'dashboard', label: 'Overview', icon: LayoutGrid },
+      { id: 'master', label: 'Master Data', icon: Database },
       { id: 'settings', label: 'Settings', icon: Settings },
+      { id: 'security', label: 'Security', icon: Lock },
     ];
     return [];
   };
@@ -67,78 +58,82 @@ export const ModeNavBar: React.FC<ModeNavBarProps> = ({
   const tabs = getTabs();
 
   return (
-    <nav className={`h-14 w-full border-b flex items-center justify-between px-6 shrink-0 z-40 transition-colors duration-300 ${styles.nav}`}>
+    <nav className={`h-[56px] w-full border-b flex items-center justify-between px-6 shrink-0 z-40 transition-colors duration-300 ${bgClass}`}>
       
-      {/* LEFT: Navigation Tabs */}
-      <div className="flex items-center gap-1 h-full overflow-x-auto">
-         {tabs.map(tab => {
-           const isActive = activeTab === tab.id;
-           return (
-            <button
-              key={tab.id}
-              onClick={() => onTabChange(tab.id)}
-              className={`h-full px-4 text-sm font-medium border-b-2 transition-colors flex items-center gap-2 ${
-                isActive 
-                  ? `${styles.activeText} ${styles.activeBorder}` 
-                  : `${styles.text} border-transparent ${styles.hover}`
-              }`}
-            >
-              <tab.icon size={16} className={isActive && isShowroom ? 'text-[#00D2BA]' : ''} />
-              <span>{tab.label}</span>
-            </button>
-           );
-         })}
+      {/* LEFT: Context Label */}
+      <div className="flex items-center min-w-[240px]">
+         {isDark ? (
+             // Configurator Mode: Back Button
+             <button onClick={onBackToDashboard} className="flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-[#3FE0C5] transition-colors group">
+                <div className="p-1.5 rounded-full bg-slate-800 border border-slate-700 group-hover:border-[#3FE0C5] transition-colors">
+                    <ArrowLeft size={14} />
+                </div>
+                Back to Dashboard
+             </button>
+         ) : (
+             // Standard Mode: Breadcrumb style
+             <div className="flex items-center gap-2 text-sm">
+                <span className="font-bold text-slate-400 uppercase tracking-wider">{mode}</span>
+                <span className="text-slate-300">/</span>
+                <span className={`font-bold ${activeTextClass}`}>
+                    {tabs.find(t => t.id === activeTab)?.label || 'Overview'}
+                </span>
+             </div>
+         )}
       </div>
 
-      {/* RIGHT: View Mode Toggle & Actions */}
-      <div className="flex items-center gap-4">
-        
-        {/* View Mode Toggle (Only for SALES) */}
-        {mode === 'SALES' && onViewModeChange && (
-          <div className="flex items-center gap-3 mr-2">
-            <span className={`text-[10px] font-bold uppercase tracking-wider ${isShowroom ? 'text-gray-500' : 'text-gray-400'}`}>
-              View Mode
-            </span>
-            <div className={`p-1 rounded-lg flex items-center gap-1 ${isShowroom ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              <button 
-                onClick={() => onViewModeChange('CRM')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
-                  viewMode === 'CRM' 
-                    ? 'bg-white text-gray-900 shadow-sm' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <LayoutDashboard size={14} />
-                CRM
-              </button>
-              
-              <button 
-                onClick={() => onViewModeChange('SHOWROOM')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
-                  viewMode === 'SHOWROOM' 
-                    ? 'bg-[#00D2BA] text-gray-900 shadow-[0_0_10px_rgba(0,210,186,0.3)]' 
-                    : 'text-gray-500 hover:text-gray-300'
-                }`}
-              >
-                <Car size={14} />
-                Showroom
-              </button>
-            </div>
-          </div>
-        )}
+      {/* CENTER: Tabs */}
+      <div className="flex-1 flex justify-center h-full">
+        <div className="flex items-center gap-1 h-full">
+            {tabs.map(tab => (
+                <button
+                    key={tab.id}
+                    onClick={() => onTabChange(tab.id)}
+                    className={`relative h-[36px] px-4 rounded-lg text-sm font-bold flex items-center gap-2 transition-all ${
+                        activeTab === tab.id 
+                        ? `${activeTextClass} ${activeBgClass}` 
+                        : `${textClass} ${hoverClass}`
+                    }`}
+                >
+                    <tab.icon size={16} strokeWidth={activeTab === tab.id ? 2.5 : 2} />
+                    <span className="hidden xl:inline">{tab.label}</span>
+                </button>
+            ))}
+        </div>
+      </div>
 
-        {/* Action Buttons */}
-        {mode === 'SALES' && viewMode === 'CRM' && (
-          <button onClick={onNewDeal} className="bg-[#111827] text-white hover:bg-black px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all">
-            <Plus size={14} /> New Deal
-          </button>
-        )}
-
-        {mode === 'SERVICE' && (
-          <button onClick={onNewRO} className="bg-orange-500 text-white hover:bg-orange-600 px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all">
-            <Plus size={14} /> New RO
-          </button>
-        )}
+      {/* RIGHT: Quick Actions */}
+      <div className="flex items-center justify-end gap-3 min-w-[240px]">
+          {mode === 'SALES' && !isDark && (
+              <>
+                <button onClick={onNewDeal} className="hidden md:flex items-center gap-2 px-3 py-2 text-slate-600 hover:bg-slate-100 rounded-lg text-xs font-bold border border-transparent hover:border-slate-200 transition-all">
+                    <Plus size={16} /> New Lead
+                </button>
+                <button onClick={onConfigurator} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800 shadow-md transition-all active:scale-95">
+                    <Car size={16} />
+                    <span>Configurator</span>
+                </button>
+              </>
+          )}
+          {mode === 'SERVICE' && (
+               <button onClick={onNewRO} className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg text-xs font-bold hover:bg-orange-600 shadow-md transition-all active:scale-95">
+                    <Wrench size={16} />
+                    <span>New RO</span>
+               </button>
+          )}
+          {mode === 'ADMIN' && (
+               <button className="flex items-center gap-2 px-4 py-2 bg-slate-200 text-slate-700 rounded-lg text-xs font-bold hover:bg-slate-300 transition-all">
+                   <Settings size={16} /> System Status
+               </button>
+          )}
+          
+          {/* Config Mode Specific Actions */}
+          {isDark && (
+              <div className="flex items-center gap-2">
+                   <span className="text-xs text-slate-500 font-medium mr-2">Auto-saved</span>
+                   <button className="px-4 py-1.5 rounded border border-slate-700 text-slate-300 text-xs font-bold hover:text-white hover:border-slate-500">Save</button>
+              </div>
+          )}
       </div>
 
     </nav>
